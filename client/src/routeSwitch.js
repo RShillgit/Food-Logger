@@ -9,13 +9,26 @@ const RouteSwitch = () => {
 
     const serverURL = 'http://localhost:8000';
 
+    const validateUser = (token) => {
+        return fetch(serverURL, {
+            headers: {
+                Authorization: token
+            },
+        })
+        .then(res => {
+            const data = res.json()
+            return (res.status, data);
+        })  
+        .catch(err => {return false})
+    }
+
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<App serverURL={serverURL}/>}/>
-                <Route path="/login" element={<Login serverURL={serverURL}/>}/>
-                <Route path="/register" element={<Register serverURL={serverURL}/>}/>
-                <Route path="*" element={<NotFound serverURL={serverURL}/>}/>
+                <Route path="/" element={<App serverURL={serverURL} validateUser={validateUser}/>}/>
+                <Route path="/login" element={<Login serverURL={serverURL} validateUser={validateUser}/>}/>
+                <Route path="/register" element={<Register serverURL={serverURL} validateUser={validateUser}/>}/>
+                <Route path="*" element={<NotFound serverURL={serverURL} validateUser={validateUser}/>}/>
             </Routes>
         </BrowserRouter>
     )
