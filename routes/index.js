@@ -5,6 +5,8 @@ const User = require('../models/user');
 const { genPassword, validatePassword } = require('../utils/passwordUtils');
 const jwtUtils = require('../utils/jwtUtils');
 
+// API https://developer.edamam.com/food-database-api-docs
+
 /* GET home page. */
 router.get('/', 
   passport.authenticate('jwt', {session: false}), 
@@ -82,6 +84,14 @@ router.post('/login', (req, res) => {
         return res.status(500).json({success: false, error_message: "The password you entered is incorrect."})
       }
     })
+})
+
+router.get('/logout', (req, res, next) => {
+  req.logout(function(err) {
+    if (err) { return next(err); }
+    res.clearCookie("token"); // Delete token from cookies
+    res.status(200).json({success: true});
+  });
 })
 
 module.exports = router;

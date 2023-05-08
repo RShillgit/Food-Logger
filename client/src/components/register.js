@@ -38,24 +38,35 @@ const Register = (props) => {
             else {
                 setDisplay(
                     <>
-                        <form id="registerForm" onSubmit={registerForm}>
-                            <label>
-                                Username:
-                                <input id="register-username" name="register-username" type="text" required={true}/>
-                            </label>
-                            <label>
-                                Password:
-                                <input id="register-password" name="register-passowrd" type="password" required={true}/>
-                            </label>
-                            <label>
-                                Confirm Passowrd:
-                                <input id="register-confirmPassword" name="register-confirmPassowrd"type="password" required={true}/>
-                            </label>
-                        </form>
+                        <div className="registerPage-title">
+                            <h1>Food Logger</h1>
+                        </div>
+                        <div className="registerForm-container">
 
-                        <div className="registerForm-buttons">
-                            <button id="registerButton" form="registerForm">Sign Up</button>
-                            <a href="/login">Already have an account?</a>
+                            <div className="registerForm-title">
+                                <h2>Sign Up</h2>
+                            </div>
+
+                            <form id="registerForm" onSubmit={registerForm}>
+                                <label>
+                                    Username:
+                                    <input id="register-username" name="register-username" type="text" required={true}/>
+                                </label>
+                                <label>
+                                    Password:
+                                    <input id="register-password" name="register-passowrd" type="password" required={true}/>
+                                </label>
+                                <label>
+                                    Confirm Passowrd:
+                                    <input id="register-confirmPassword" name="register-confirmPassowrd"type="password" required={true}/>
+                                </label>
+
+                                <div className="registerForm-buttons">
+                                    <button id="registerButton" form="registerForm">Sign Up</button>
+                                    <p>·</p>
+                                    <a href="/login">Already have an account?</a>
+                                </div>
+                            </form>
                         </div>
                     </>
                 )
@@ -112,7 +123,7 @@ const Register = (props) => {
     }
 
     return (
-        <div>
+        <div className="registerPage">
             {display}
             {errorMessage}
         </div>

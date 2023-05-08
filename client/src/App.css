@@ -1,0 +1,66 @@
+/* Login Page */
+.loginPage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.loginForm-container {
+    padding: 1rem;
+    border: 1px solid black;
+}
+.loginForm-title {
+    display: flex;
+    justify-content: center;
+}
+.loginForm-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+.login-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Register Page */
+.registerPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.registerForm-container {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+}
+#registerForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+.registerForm-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Main Page */
+.mainPage {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+.mainPage-container {
+    border: 1px solid black;
+    padding: 1rem;
+ }

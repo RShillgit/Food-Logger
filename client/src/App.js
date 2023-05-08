@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import {useCookies} from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
+import Navbar from './components/navbar';
 
 function App(props) {
 
@@ -9,6 +10,18 @@ function App(props) {
   const authedUser = useRef();
   const navigate = useNavigate();
   const [display, setDisplay] = useState();
+
+  /* Calories */
+  const [caloriesRemaining, setCaloriesRemaining] = useState(2500);
+  const [breakfastCalories, setBreakfastCalories] = useState(0);
+  const [lunchCalories, setLunchCalories] = useState(0);
+  const [dinnerCalories, setDinnerCalories] = useState(0);
+  const [snackCalories, setSnackCalories] = useState(0);
+
+  /* Macros */
+  const [carbCount, setCarbCount] = useState(0);
+  const [fatCount, setFatCount] = useState(0);
+  const [proteinCount, setProteinCount] = useState(0);
 
   // Anytime the cookie changes, set auth
   useEffect(() => {
@@ -32,7 +45,7 @@ function App(props) {
     // Anytime auth changes, set display
     useEffect(() => {
 
-      // Loading
+      // TODO: Loading
       if (auth === null) {
     
       }
@@ -45,8 +58,39 @@ function App(props) {
 
 
   return (
-    <div className="App">
-      <h1>Food logger</h1>
+    <div className="mainPage">
+      <Navbar serverURL={props.serverURL}/>
+      {(auth)
+        ?
+        <div className='mainPage-container'>
+          <div className='caloriesRemaining'>
+            <h2>Calories Remaining: {caloriesRemaining}</h2>
+          </div>
+
+          <div className='mealOverview'>
+            <p>Breakfast {breakfastCalories}</p>
+          </div>
+
+          <div className='mealOverview'>
+            <p>Lunch {lunchCalories}</p>
+          </div>
+
+          <div className='mealOverview'>
+            <p>Dinner {dinnerCalories}</p>
+          </div>
+
+          <div className='mealOverview'>
+            <p>Snack {snackCalories}</p>
+          </div>
+
+          <div className='macroNutrient-stats'>
+            <p>Carbs {carbCount}g</p>
+            <p>Fat {fatCount}g</p>
+            <p>Protein {proteinCount}g</p>
+          </div>
+        </div>
+        :<></>
+      }
     </div>
   );
 }

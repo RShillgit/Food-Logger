@@ -55,9 +55,13 @@ const Login = (props) => {
             setDisplay(
                 <>
                     <div className="loginPage-title">
-                        <h1>Login</h1>
+                        <h1>Food Logger</h1>
                     </div>
                     <div className="loginForm-container">
+
+                        <div className="loginForm-title">
+                            <h2>Log In</h2>
+                        </div>
 
                         {registeredSuccessfullyMessage}
 
@@ -127,7 +131,7 @@ const Login = (props) => {
     }
 
     return (
-        <div>
+        <div className="loginPage">
             {display}
             {errorMessage}
         </div>
