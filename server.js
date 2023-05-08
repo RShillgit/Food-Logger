@@ -3,10 +3,25 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const mongoose = require('mongoose');
+require('dotenv').config();
+const cors = require('cors');
 
 var indexRouter = require('./routes/index');
 
 var app = express();
+
+/** 
+ * ---- MONGOOSE CONNECTION ----
+ */
+mongoose.set('strictQuery', false); 
+const mongoDBURL = process.env.db_string;
+const mongoDBOptions = { 
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+} 
+mongoose.connect(mongoDBURL, mongoDBOptions)
+  .catch((err) => console.log(`Error Connecting: ${err}`))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -14,9 +29,13 @@ app.set('view engine', 'pug');
 
 app.use(logger('dev'));
 app.use(express.json());
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, 'public')));
+
+// FoodLoggerCalorieCounter
+// NIc9s21m2hcnpPnM
 
 app.use('/', indexRouter);
 
