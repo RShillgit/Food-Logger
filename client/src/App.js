@@ -113,7 +113,7 @@ function App(props) {
                 </div>
                 
                 <div className='right'>
-                  <p>{Math.ceil(foodItem.food.nutrients.ENERC_KCAL)} Cals</p>
+                  <p>{Math.round(foodItem.food.nutrients.ENERC_KCAL)} Cals</p>
                 </div>
 
               </div>
@@ -219,8 +219,8 @@ function App(props) {
     .then(data => {
 
       console.log(data)
-      // Display food label
 
+      // Display food label
       setNutritionFactsDisplay(<NutritionFacts facts={data} quantity={1} measurement={e.target.value}/>);
 
     })
