@@ -23,6 +23,12 @@ function App(props) {
   const [fatCount, setFatCount] = useState(0);
   const [proteinCount, setProteinCount] = useState(0);
 
+  /* Food Search & Display */
+  const [modalFoodDisplay, setModalFoodDisplay] = useState();
+  const [foodSearchOptions, setFoodSearchOptions] = useState([]);
+  const [searchedFoods, setSearchedFoods] = useState([])
+  const [selectedFoodItem, setSelectedFoodItem] = useState();
+
   // Anytime the cookie changes, set auth
   useEffect(() => {
 
@@ -56,6 +62,50 @@ function App(props) {
     }
   }, [auth])
 
+  // Anytime food search variables change set proper modal display
+  useEffect(() => {
+
+    // If there is a selected food item, display that item
+    if (selectedFoodItem) {
+      setModalFoodDisplay(
+        <div>
+          <h1>{selectedFoodItem.food.label}</h1>
+        </div>
+      )
+    }
+
+    // Else if there is a list of searched foods display them
+    else if (searchedFoods.length > 0) {
+      setModalFoodDisplay(
+        <div>
+            {searchedFoods.map((foodItem, i) => {
+            return (
+              <p key={i} onClick={() => selectAPIFoodItem(foodItem)}>{foodItem.food.label}</p>
+            )
+          })}
+        </div>
+      )
+    }
+
+    // Else if there are food suggestions display them
+    else if (foodSearchOptions.length > 0) {
+      setModalFoodDisplay(
+        <ul className='foodSuggestions' >
+          {foodSearchOptions.map((option, i) => {
+            return (
+              <li key={i} onClick={() => selectFoodItemSuggestion(option)}>{option}</li>
+            )
+          })}
+        </ul>
+      )
+    }
+
+    else {
+      setModalFoodDisplay();
+    }
+
+  }, [foodSearchOptions, searchedFoods, selectedFoodItem])
+
   // Opens Meal Associated Modal
   const openMealModal = (modalID) => {
     const selectedModal = document.getElementById(modalID);
@@ -64,8 +114,46 @@ function App(props) {
 
   // Closes Meal Assocaited Modal
   const closeMealModal = (modalID) => {
+
+    setFoodSearchOptions([]);
+    setSearchedFoods([]);
+    setSelectedFoodItem();
+
     const selectedModal = document.getElementById(modalID);
     selectedModal.close();
+  }
+
+  // Autocomplete for food search
+  const foodSearchAutocomplete = (e) => {
+    fetch(`https://api.edamam.com/auto-complete?app_id=${process.env.REACT_APP_API_ID}&app_key=${process.env.REACT_APP_API_KEY}&q=${e.target.value}`)
+    .then(res => res.json())
+    .then(data => {
+      setFoodSearchOptions(data);
+    })
+    .catch(err => console.log(err))
+  }
+
+  // Selects food item suggestion
+  const selectFoodItemSuggestion = (foodItemSuggestion) => {
+
+    fetch(`https://api.edamam.com/api/food-database/v2/parser?app_id=${process.env.REACT_APP_API_ID}&app_key=${process.env.REACT_APP_API_KEY}&ingr=${foodItemSuggestion}&nutrition-type=cooking`)
+    .then(res => res.json())
+    .then(data => {
+
+      // Set food search items to empty array
+      setFoodSearchOptions([]);
+
+      // Set searched foods
+      if (data.hints.length > 0) {
+        setSearchedFoods(data.hints)
+      }
+    })
+    .catch(err => console.log(err))
+  }
+
+  // Selects a food item from the api to display
+  const selectAPIFoodItem = (foodItem) => {
+    setSelectedFoodItem(foodItem);
   }
 
   return (
@@ -85,10 +173,8 @@ function App(props) {
           <dialog id='breakfastModal'>
             <button onClick={() => closeMealModal('breakfastModal')}>X</button>
             <h1>Breakfast</h1>
-            <input type="text" placeholder="Searchbar" />
-            <p>Here we will show any existing breakfast foods</p>
-            <p>Egg Whites 65cals 120g</p>
-            <p>Bacon 150cals 3slices</p>
+            <input type="text" placeholder="Search a food" onChange={foodSearchAutocomplete} />
+            {modalFoodDisplay}
           </dialog>
 
           <div className='mealOverview' onClick={() => openMealModal('lunchModal')}>
@@ -97,6 +183,8 @@ function App(props) {
           <dialog id='lunchModal'>
             <button onClick={() => closeMealModal('lunchModal')}>X</button>
             <h1>Lunch</h1>
+            <input type="text" placeholder="Search a food" onChange={foodSearchAutocomplete} />
+            {modalFoodDisplay}
           </dialog>
 
           <div className='mealOverview' onClick={() => openMealModal('dinnerModal')}>
@@ -105,6 +193,8 @@ function App(props) {
           <dialog id='dinnerModal'>
             <button onClick={() => closeMealModal('dinnerModal')}>X</button>
             <h1>Dinner</h1>
+            <input type="text" placeholder="Search a food" onChange={foodSearchAutocomplete} />
+            {modalFoodDisplay}
           </dialog>
 
           <div className='mealOverview' onClick={() => openMealModal('snackModal')}>
@@ -113,6 +203,8 @@ function App(props) {
           <dialog id='snackModal'>
             <button onClick={() => closeMealModal('snackModal')}>X</button>
             <h1>Snack</h1>
+            <input type="text" placeholder="Search a food" onChange={foodSearchAutocomplete} />
+            {modalFoodDisplay}
           </dialog>
 
           <div className='macroNutrient-stats'>
