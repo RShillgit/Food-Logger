@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import {useCookies} from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './components/navbar';
+import NutritionFacts from './components/nutritionFacts';
 
 function App(props) {
 
@@ -28,6 +29,7 @@ function App(props) {
   const [foodSearchOptions, setFoodSearchOptions] = useState([]);
   const [searchedFoods, setSearchedFoods] = useState([])
   const [selectedFoodItem, setSelectedFoodItem] = useState();
+  const [nutritionFactsDisplay, setNutritionFactsDisplay] = useState();
 
   // Anytime the cookie changes, set auth
   useEffect(() => {
@@ -67,20 +69,54 @@ function App(props) {
 
     // If there is a selected food item, display that item
     if (selectedFoodItem) {
+      console.log(selectedFoodItem)
       setModalFoodDisplay(
-        <div>
+        <div className='individualFoodItem'>
+
+          <button onClick={() => {
+            setSelectedFoodItem();
+          }}>{"<"}</button>
+
+          {selectedFoodItem.food.image
+            ?<img src={selectedFoodItem.food.image} alt=''/>
+            :<></>
+          }
+          
           <h1>{selectedFoodItem.food.label}</h1>
+
+          {selectedFoodItem.measures.map((measure, i) => {
+            return (
+              <button value={measure.label} key={i} onClick={(e) => getNutritionFromMeasurement(e, measure.uri, selectedFoodItem.food.foodId)}>{measure.label}</button>
+            )
+          })}
+
+          {nutritionFactsDisplay}
         </div>
       )
     }
 
     // Else if there is a list of searched foods display them
     else if (searchedFoods.length > 0) {
+      console.log(searchedFoods)
       setModalFoodDisplay(
-        <div>
+        <div className='searchedFoodItems'>
             {searchedFoods.map((foodItem, i) => {
             return (
-              <p key={i} onClick={() => selectAPIFoodItem(foodItem)}>{foodItem.food.label}</p>
+              <div className='searchedFoodItem' key={i} onClick={() => selectAPIFoodItem(foodItem)}>
+                
+                <div className='left'>
+                  {foodItem.food.image
+                    ?<img src={foodItem.food.image} alt=""/>
+                    :<></>
+                  }
+                  <p>{foodItem.food.label}</p>
+                </div>
+                
+                <div className='right'>
+                  <p>{Math.ceil(foodItem.food.nutrients.ENERC_KCAL)} Cals</p>
+                </div>
+
+              </div>
             )
           })}
         </div>
@@ -90,13 +126,15 @@ function App(props) {
     // Else if there are food suggestions display them
     else if (foodSearchOptions.length > 0) {
       setModalFoodDisplay(
-        <ul className='foodSuggestions' >
-          {foodSearchOptions.map((option, i) => {
-            return (
-              <li key={i} onClick={() => selectFoodItemSuggestion(option)}>{option}</li>
-            )
-          })}
-        </ul>
+        <>
+          <ul className='foodSuggestions' >
+            {foodSearchOptions.map((option, i) => {
+              return (
+                <li key={i} onClick={() => selectFoodItemSuggestion(option)}>{option}</li>
+              )
+            })}
+          </ul>
+        </>
       )
     }
 
@@ -104,7 +142,7 @@ function App(props) {
       setModalFoodDisplay();
     }
 
-  }, [foodSearchOptions, searchedFoods, selectedFoodItem])
+  }, [foodSearchOptions, searchedFoods, selectedFoodItem, nutritionFactsDisplay])
 
   // Opens Meal Associated Modal
   const openMealModal = (modalID) => {
@@ -154,6 +192,39 @@ function App(props) {
   // Selects a food item from the api to display
   const selectAPIFoodItem = (foodItem) => {
     setSelectedFoodItem(foodItem);
+  }
+
+  // Gets nutrition information based off measurement
+  const getNutritionFromMeasurement = (e, uri, foodId) => {
+
+    // Enable all buttons
+
+    // Disable the clicked button
+
+    // Get info from uri
+    fetch(`https://api.edamam.com/api/food-database/v2/nutrients?app_id=${process.env.REACT_APP_API_ID}&app_key=${process.env.REACT_APP_API_KEY}`, {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        "ingredients": [
+          {
+            "quantity": 1,
+            "measureURI": uri,
+            "foodId": foodId
+          }
+        ]
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+
+      console.log(data)
+      // Display food label
+
+      setNutritionFactsDisplay(<NutritionFacts facts={data} quantity={1} measurement={e.target.value}/>);
+
+    })
+    .catch(err => console.log(err))
   }
 
   return (

@@ -90,3 +90,49 @@
     border: 1px solid black;
     padding: 1rem;
  }
+
+ /* Meal Modal */
+
+    /* Input Suggestions */
+    .foodSuggestions {
+        background-color: aqua;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        list-style: none;
+    }
+    .foodSuggestions li {
+        display: flex;
+        padding: 8px;
+    }
+    .foodSuggestions li:hover {
+        cursor: pointer;
+        background-color: antiquewhite;
+    }
+
+    /* Searched Food Items */
+    .searchedFoodItems {
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .searchedFoodItem {
+        display: flex;
+        justify-content: space-between;
+        padding-right: 8px;
+    }
+    .searchedFoodItem .left {
+        display: flex;
+        gap: 8px;
+    }
+    .searchedFoodItem .left img {
+        width: 50px;
+    }
+    .searchedFoodItem:hover {
+        cursor: pointer;
+        background-color: aqua;
+    }
+
+    /* Individual Food Item */
