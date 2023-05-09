@@ -58,7 +58,7 @@ function App(props) {
 
 
   return (
-    <div className="mainPage">
+    <div className="App mainPage">
       <Navbar serverURL={props.serverURL}/>
       {(auth)
         ?

@@ -72,7 +72,7 @@ const Login = (props) => {
                         </form>
 
                         <div className="login-buttons">
-                            <button id="guestLoginButton">Log In As A Guest</button>
+                            <button id="guestLoginButton" onClick={guestLogin}>Log In As A Guest</button>
                             <p>·</p>
                             <a id="registerLink" href='/register'> Sign Up</a>                          
                         </div>
@@ -126,6 +126,32 @@ const Login = (props) => {
             if (data.success) {
                 // Get the cookie from the backend and set it in the browser
                 setCookie('token', data.token, {path: '/'})
+            }
+        })
+    }
+
+    // Creates a random account and logs it in
+    const guestLogin = (e) => {
+        e.preventDefault();
+
+        fetch(`${props.serverURL}/guest`)
+        .then(res => res.json())
+        .then(data => {
+
+            // If it was successfull, run loginRequest with this information
+            if(data.success === true) {
+                const username = data.result.username;
+                const password = data.result.username;
+                const login_info = {username, password}
+                loginRequest(login_info);
+            }
+            // Otherwise render error message
+            else {
+                setErrorMessage(
+                    <div className="errorMessage">
+                        <p>An Error Occurred Please Try Again</p>
+                    </div>
+                )
             }
         })
     }
