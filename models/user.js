@@ -6,7 +6,7 @@ const UserSchema = new Schema({
     username: {type: String, maxLength: 50, required: true},
     hash: {type: String, required: true},
     salt: {type: String, required: true},
-    jwtoken: {type: String},
+    food_logs: [{type: Schema.Types.ObjectId, ref: "FoodLog"}]
 })
 
 // Export model

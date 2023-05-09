@@ -63,7 +63,6 @@ const Register = (props) => {
 
                                 <div className="registerForm-buttons">
                                     <button id="registerButton" form="registerForm">Sign Up</button>
-                                    <p>·</p>
                                     <a href="/login">Already have an account?</a>
                                 </div>
                             </form>
