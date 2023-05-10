@@ -110,6 +110,11 @@
 .individualExistingFood .left img {
     width: 50px;
 }
+.individualExistingFood .right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
  /* Meal Modal */
 

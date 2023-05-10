@@ -173,7 +173,54 @@ router.post('/logs/:logID',
     })
   },
   (req, res) => {
-    return res.status(500).json({success: false, error: 'Unable to log food item', auth: req.isAuthenticated()});
+    return res.status(401).json({success: false, error: 'Unauthenticated', auth: req.isAuthenticated()});
+  }
+)
+
+// Delete food item from a meal
+router.delete('/logs/:logID/:meal/:uniqueID/:foodID',
+passport.authenticate('jwt', {session: false}), 
+  (req, res) => {
+
+    // Find the log
+    FoodLog.findById(req.params.logID)
+    .then(log => {
+
+      // Get associated meal
+      let mealArray;
+      if(req.params.meal === 'breakfast') mealArray = log.breakfast;
+      else if(req.params.meal === 'lunch') mealArray = log.lunch;
+      else if(req.params.meal === 'dinner') mealArray = log.dinner;
+      else if(req.params.meal === 'snack') mealArray = log.snack;
+      else return res.status(500).json({success: false, auth: req.isAuthenticated()});
+
+      // Remove food item from the meal array
+      const newMealArray = mealArray.filter(foodItem => {
+        return foodItem._id !== req.params.uniqueID && foodItem.foodId !== req.params.foodID
+      })
+
+      // Update food log
+      FoodLog.findByIdAndUpdate(req.params.logID,
+        {
+          [req.params.meal]: newMealArray
+        },
+        {new: true}  
+      )
+      .then(newFoodLog => {
+        return res.status(200).json({success: true, newFoodLog: newFoodLog, auth: req.isAuthenticated()});
+
+      })
+      .catch(err => {
+        return res.status(500).json({success: false, error: err, auth: req.isAuthenticated()});
+      })
+    })
+    .catch(err => {
+      return res.status(500).json({success: false, error: err, auth: req.isAuthenticated()});
+    })
+
+  },
+  (req, res) => {
+    return res.status(401).json({success: false, error: 'Unauthenticated', auth: req.isAuthenticated()});
   }
 )
 

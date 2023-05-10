@@ -213,10 +213,6 @@ function App(props) {
 
   }, [foodSearchOptions, searchedFoods, selectedFoodItem, nutritionFactsDisplay])
 
-  const calcCaloriesRemaining = () => {
-
-  }
-
   // Calculates calories for calories remaining and each meal
   const calculateCalories = (identifier) => {
 
@@ -351,7 +347,8 @@ function App(props) {
   const logFoodItem = (stats) => {
 
     const foodItem = {
-      id : selectedFoodItem.food.foodId,
+      _id: uuidv4(),
+      foodId : selectedFoodItem.food.foodId,
       label: selectedFoodItem.food.label,
       image: selectedFoodItem.food.image,
       total_calories: stats.calories,
@@ -421,6 +418,31 @@ function App(props) {
     setLogDate(`${dateSplit[0]}-${dateSplit[1]}-${newDay}`)
   }
 
+  // Deletes an existing food item
+  const deleteFoodItem = (meal, item) => {
+
+    console.log("item", item)
+    console.log("meal", meal)
+
+    fetch(`${props.serverURL}/logs/${foodLog._id}/${meal}/${item._id}/${item.foodId}`, {
+      method: 'DELETE',
+      headers: { 
+        "Content-Type": "application/json",
+        Authorization: cookie.token
+      },
+      mode: 'cors',
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data)
+      if(data.success) {
+        setFoodLog(data.newFoodLog)
+      }
+    })
+    .catch(err => console.log(err))
+
+  }
+
   // Displays existing foods based on the selected meal
   const displayExistingFoods = (meal) => {
 
@@ -442,6 +464,7 @@ function App(props) {
                     </div>
                     <div className='right'>
                       <p>{food.total_calories} cals</p>
+                      <button onClick={() => deleteFoodItem(meal, food)}>X</button>
                     </div>
                   </div>
                 )
@@ -473,6 +496,7 @@ function App(props) {
                     </div>
                     <div className='right'>
                       <p>{food.total_calories} cals</p>
+                      <button onClick={() => deleteFoodItem(meal, food)}>X</button>
                     </div>
                   </div>
                 )
@@ -504,6 +528,7 @@ function App(props) {
                     </div>
                     <div className='right'>
                       <p>{food.total_calories} cals</p>
+                      <button onClick={() => deleteFoodItem(meal, food)}>X</button>
                     </div>
                   </div>
                 )
@@ -535,6 +560,7 @@ function App(props) {
                     </div>
                     <div className='right'>
                       <p>{food.total_calories} cals</p>
+                      <button onClick={() => deleteFoodItem(meal, food)}>X</button>
                     </div>
                   </div>
                 )
