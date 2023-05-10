@@ -8,9 +8,13 @@ function App(props) {
 
   const [cookie, setCookie] = useCookies(['token']);
   const [auth, setAuth] = useState(null);
-  const authedUser = useRef();
+  const [user, setUser] = useState();
   const navigate = useNavigate();
+
   const [display, setDisplay] = useState();
+
+  /* Food Log */
+  const [logDate, setLogDate] = useState();
 
   /* Calories */
   const [caloriesRemaining, setCaloriesRemaining] = useState(2500);
@@ -41,14 +45,45 @@ function App(props) {
 
           // If the resposne is successful
           if (validateUserResponse.success === true) {
-            authedUser.current = validateUserResponse.currentUser
+            setUser(validateUserResponse.currentUser);
             setAuth(validateUserResponse.auth)
+
+            // Set log date to current date
+            const todaysDate = new Date();
+            let day = todaysDate.getDate();
+            let month = todaysDate.getMonth() + 1;
+            let year = todaysDate.getFullYear();
+            if (day < 10) {
+              day = `0${day}`;
+            }
+            if (month < 10) {
+              month = `0${month}`;
+            }
+            const todaysDateFormatted = `${year}-${month}-${day}`;
+            setLogDate(todaysDateFormatted);
           }
       }
       else setAuth(false);
     })()
 
   }, [cookie])
+
+  // TODO: On user change
+  useEffect(() => {
+
+    // If user has food logs check for current day's log
+    if(user && user.food_logs.length > 0) {
+
+      // If current days log exists render it
+
+    }
+    else {
+
+      // Render empty log for todays date
+
+    }
+
+  }, [user])
 
   // Anytime auth changes, set display
   useEffect(() => {
@@ -62,6 +97,7 @@ function App(props) {
     else if (auth === false) {
       navigate('/login')
     }
+
   }, [auth])
 
   // Anytime food search variables change set proper modal display
@@ -156,6 +192,7 @@ function App(props) {
     setFoodSearchOptions([]);
     setSearchedFoods([]);
     setSelectedFoodItem();
+    setNutritionFactsDisplay();
 
     const selectedModal = document.getElementById(modalID);
     selectedModal.close();
@@ -221,10 +258,64 @@ function App(props) {
       console.log(data)
 
       // Display food label
-      setNutritionFactsDisplay(<NutritionFacts facts={data} quantity={1} measurement={e.target.value}/>);
+      setNutritionFactsDisplay(generateNutritionFacts(data, e.target.value));
 
     })
     .catch(err => console.log(err))
+  }
+
+  // Generates Nutrition Facts 
+  const generateNutritionFacts = (facts, measurement) => {
+    return (<NutritionFacts facts={facts} measurement={measurement} logFoodItem={logFoodItem}/>);
+  }
+
+  // TODO: Logs food item
+  const logFoodItem = (item) => {
+
+    /* Need Some sort of object to send to the backend */
+    /*
+      foodItem = {
+        _id,
+        servings: {quantity: 2, serving_units: 'g'}, -> That way we can get the food item and use the
+          quantity and servings to calculate the calories and such when viewing
+        ...All the api information
+      }
+    */
+
+    console.log("Log Item", item);
+
+    //fetch(`props.serverURL/logs/:logID/breakfast`)
+  }
+
+  // TODO: Go back a day
+  const previousDay = () => {
+    
+    const dateSplit = logDate.split('-');
+    const day = dateSplit[2];
+    let newDay = Number(day) - 1;
+
+    // Previous day === the last day of the previous month
+    if (newDay === 0) {
+      console.log('Format date to last day of previous month');
+    }
+    else if (newDay < 10) {
+      newDay = `0${newDay}`;
+    }
+    setLogDate(`${dateSplit[0]}-${dateSplit[1]}-${newDay}`)
+  }
+
+  // TODO: Go forward a day
+  const nextDay = () => {
+    const dateSplit = logDate.split('-');
+    const day = dateSplit[2];
+    let newDay = Number(day) + 1;
+
+    // If next day === the first day of the next month
+
+    if (newDay < 10) {
+      newDay = `0${newDay}`;
+    }
+    setLogDate(`${dateSplit[0]}-${dateSplit[1]}-${newDay}`)
   }
 
   return (
@@ -233,6 +324,12 @@ function App(props) {
       {(auth)
         ?
         <div className='mainPage-container'>
+
+          <div className='date-navigation'>
+            <button onClick={previousDay}>{"<"}</button>
+            <input type="date" value={logDate} onChange={(e) => setLogDate(e.target.value)}/>
+            <button onClick={nextDay}>{">"}</button>
+          </div>
 
           <div className='caloriesRemaining'>
             <h2>Calories Remaining: {caloriesRemaining}</h2>
