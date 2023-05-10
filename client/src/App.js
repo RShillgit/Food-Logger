@@ -122,7 +122,10 @@ function App(props) {
 
           {selectedFoodItem.measures.map((measure, i) => {
             return (
-              <button value={measure.label} key={i} onClick={(e) => getNutritionFromMeasurement(e, measure.uri, selectedFoodItem.food.foodId)}>{measure.label}</button>
+              <button className='foodUnitSelect' value={measure.label} key={i} 
+                onClick={(e) => getNutritionFromMeasurement(e, measure.uri, selectedFoodItem.food.foodId)}>
+                {measure.label}
+              </button>
             )
           })}
 
@@ -235,8 +238,11 @@ function App(props) {
   const getNutritionFromMeasurement = (e, uri, foodId) => {
 
     // Enable all buttons
+    const foodUnitButtons = document.querySelectorAll('.foodUnitSelect');
+    foodUnitButtons.forEach(button => button.disabled = false);
 
     // Disable the clicked button
+    e.target.disabled = true;
 
     // Get info from uri
     fetch(`https://api.edamam.com/api/food-database/v2/nutrients?app_id=${process.env.REACT_APP_API_ID}&app_key=${process.env.REACT_APP_API_KEY}`, {
