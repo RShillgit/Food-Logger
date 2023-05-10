@@ -91,6 +91,26 @@
     padding: 1rem;
  }
 
+/* Existing Foods */
+.existingFoods {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 1rem 0 1rem 0;
+}
+.individualExistingFood {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+}
+.individualExistingFood .left {
+    display: flex;
+    gap: 8px;
+}
+.individualExistingFood .left img {
+    width: 50px;
+}
+
  /* Meal Modal */
 
     /* Input Suggestions */

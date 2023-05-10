@@ -236,7 +236,7 @@ const NutritionFacts = (props) => {
                             units: props.measurement
                         }
 
-                        props.logFoodItem(props.facts, stats)
+                        props.logFoodItem(stats)
                     }}>Log Food</button>
                 </>
                 :<></>

@@ -311,8 +311,8 @@ function App(props) {
     return (<NutritionFacts facts={facts} measurement={measurement} logFoodItem={logFoodItem}/>);
   }
 
-  // TODO: Logs food item
-  const logFoodItem = (item, stats) => {
+  // Logs food item
+  const logFoodItem = (stats) => {
 
     const foodItem = {
       id : selectedFoodItem.food.foodId,
@@ -343,6 +343,7 @@ function App(props) {
     .then(res => res.json())
     .then(data => {
       console.log(data)
+
       if (data.success) {
         setFoodLog(data.updatedFoodLog);
         setSelectedFoodItem();
@@ -395,7 +396,18 @@ function App(props) {
             <>
               {foodLog.breakfast.map(food => {
                 return (
-                  <p key={uuidv4()}>{food.label}</p>
+                  <div className='individualExistingFood' key={uuidv4()}>
+                    <div className='left'>
+                      {food.image
+                        ? <img src={food.image} alt=""/>
+                        :<></>
+                      }
+                      <p>{food.label}</p>
+                    </div>
+                    <div className='right'>
+                      <p>{food.total_calories} cals</p>
+                    </div>
+                  </div>
                 )
               })}
             </>
@@ -415,7 +427,18 @@ function App(props) {
             <>
               {foodLog.lunch.map(food => {
                 return (
-                  <p key={uuidv4()}>{food.label}</p>
+                  <div className='individualExistingFood' key={uuidv4()}>
+                    <div className='left'>
+                      {food.image
+                        ? <img src={food.image} alt=""/>
+                        :<></>
+                      }
+                      <p>{food.label}</p>
+                    </div>
+                    <div className='right'>
+                      <p>{food.total_calories} cals</p>
+                    </div>
+                  </div>
                 )
               })}
             </>
@@ -435,7 +458,18 @@ function App(props) {
             <>
               {foodLog.dinner.map(food => {
                 return (
-                  <p key={uuidv4()}>{food.label}</p>
+                  <div className='individualExistingFood' key={uuidv4()}>
+                    <div className='left'>
+                      {food.image
+                        ? <img src={food.image} alt=""/>
+                        :<></>
+                      }
+                      <p>{food.label}</p>
+                    </div>
+                    <div className='right'>
+                      <p>{food.total_calories} cals</p>
+                    </div>
+                  </div>
                 )
               })}             
             </>
@@ -455,7 +489,18 @@ function App(props) {
             <>
               {foodLog.snack.map(food => {
                 return (
-                  <p key={uuidv4()}>{food.label}</p>
+                  <div className='individualExistingFood' key={uuidv4()}>
+                    <div className='left'>
+                      {food.image
+                        ? <img src={food.image} alt=""/>
+                        :<></>
+                      }
+                      <p>{food.label}</p>
+                    </div>
+                    <div className='right'>
+                      <p>{food.total_calories} cals</p>
+                    </div>
+                  </div>
                 )
               })}  
             </>
