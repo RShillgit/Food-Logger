@@ -11,10 +11,9 @@ function App(props) {
   const [user, setUser] = useState();
   const navigate = useNavigate();
 
-  const [display, setDisplay] = useState();
-
   /* Food Log */
   const [logDate, setLogDate] = useState();
+  const [foodLog, setFoodLog] = useState();
 
   /* Calories */
   const [caloriesRemaining, setCaloriesRemaining] = useState(2500);
@@ -68,22 +67,51 @@ function App(props) {
 
   }, [cookie])
 
-  // TODO: On user change
+  // On date change
   useEffect(() => {
 
-    // If user has food logs check for current day's log
-    if(user && user.food_logs.length > 0) {
+    if (user) {
 
-      // If current days log exists render it
+      const dateParts = logDate.split('-');
+      const logYear = Number(dateParts[0]);
+      const logMonth = Number(dateParts[1] - 1);
+      const logDay = Number(dateParts[2]);
 
+      // Check if user has a food log for this log date
+      const dateExists = user.food_logs.filter(log => {
+
+        const converted = new Date(log.date)
+        const year = converted.getFullYear();
+        const month = converted.getMonth();
+        const day = converted.getDate();
+
+        if (year === logYear && month === logMonth && day === logDay) {
+          return log;
+        }
+        return null;
+      })
+
+      // If they do set the food log to this log
+      if (dateExists.length > 0) {
+        setFoodLog(dateExists[0])
+      }
     }
+
+  }, [logDate])
+
+  // On food log change
+  useEffect(() => {
+
+    // If a food object exists render it
+    if(foodLog) {
+      console.log(foodLog)
+    }
+
+    // Else render normal display
     else {
-
-      // Render empty log for todays date
-
     }
 
-  }, [user])
+  }, [foodLog])
 
   // Anytime auth changes, set display
   useEffect(() => {
@@ -324,6 +352,91 @@ function App(props) {
     setLogDate(`${dateSplit[0]}-${dateSplit[1]}-${newDay}`)
   }
 
+  // Displays existing foods based on the selected meal
+  const displayExistingFoods = (meal) => {
+
+    if (meal === 'breakfast') {
+      return (
+        <div className='existingFoods'>
+          {(foodLog && foodLog.breakfast.length > 0)
+            ?
+            <>
+              {foodLog.breakfast.map(food => {
+                return (
+                  <p key={food.id}>{food.label}</p>
+                )
+              })}
+            </>
+            :
+            <>
+              <h3>No foods to display</h3>
+            </>
+          }
+        </div>
+      )
+    }
+    else if (meal === 'lunch') {
+      return (
+        <div className='existingFoods'>
+          {(foodLog && foodLog.lunch.length > 0)
+            ?
+            <>
+              {foodLog.lunch.map(food => {
+                return (
+                  <p key={food.id}>{food.label}</p>
+                )
+              })}
+            </>
+            :
+            <>
+              <h3>No foods to display</h3>
+            </>
+          }
+        </div>
+      )
+    }
+    else if (meal === 'dinner') {
+      return (
+        <div className='existingFoods'>
+          {(foodLog && foodLog.dinner.length > 0)
+            ?
+            <>
+              {foodLog.dinner.map(food => {
+                return (
+                  <p key={food.id}>{food.label}</p>
+                )
+              })}             
+            </>
+            :
+            <>
+              <h3>No foods to display</h3>
+            </>
+          }
+        </div>
+      )
+    }
+    else if (meal === 'snack') {
+      return (
+        <div className='existingFoods'>
+          {(foodLog && foodLog.snack.length > 0)
+            ?
+            <>
+              {foodLog.snack.map(food => {
+                return (
+                  <p key={food.id}>{food.label}</p>
+                )
+              })}  
+            </>
+            :
+            <>
+              <h3>No foods to display</h3>
+            </>
+          }
+        </div>
+      )
+    }
+  }
+
   return (
     <div className="App mainPage">
       <Navbar serverURL={props.serverURL}/>
@@ -348,6 +461,7 @@ function App(props) {
             <button onClick={() => closeMealModal('breakfastModal')}>X</button>
             <h1>Breakfast</h1>
             <input type="text" placeholder="Search a food" onChange={foodSearchAutocomplete} />
+            {displayExistingFoods('breakfast')}
             {modalFoodDisplay}
           </dialog>
 
@@ -358,6 +472,7 @@ function App(props) {
             <button onClick={() => closeMealModal('lunchModal')}>X</button>
             <h1>Lunch</h1>
             <input type="text" placeholder="Search a food" onChange={foodSearchAutocomplete} />
+            {displayExistingFoods('lunch')}
             {modalFoodDisplay}
           </dialog>
 
@@ -368,6 +483,7 @@ function App(props) {
             <button onClick={() => closeMealModal('dinnerModal')}>X</button>
             <h1>Dinner</h1>
             <input type="text" placeholder="Search a food" onChange={foodSearchAutocomplete} />
+            {displayExistingFoods('dinner')}
             {modalFoodDisplay}
           </dialog>
 
@@ -378,6 +494,7 @@ function App(props) {
             <button onClick={() => closeMealModal('snackModal')}>X</button>
             <h1>Snack</h1>
             <input type="text" placeholder="Search a food" onChange={foodSearchAutocomplete} />
+            {displayExistingFoods('snack')}
             {modalFoodDisplay}
           </dialog>
 

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const passport = require('passport');
 const User = require('../models/user');
+const FoodLog = require('../models/foodLog');
 const { genPassword, validatePassword } = require('../utils/passwordUtils');
 const jwtUtils = require('../utils/jwtUtils');
 const crypto = require('crypto');
@@ -14,11 +15,19 @@ router.get('/',
   (req, res) => {
     const token = req.headers.authorization;
     const userToken = jwtUtils.jwtVerify(token);
-    
-    return res.status(200).json({success: true, auth: req.isAuthenticated(), userToken: userToken, currentUser: req.user});
+
+    // Populate User
+    User.findById(req.user._id)
+    .populate('food_logs')
+    .then(populatedUser => {
+      return res.status(200).json({success: true, auth: req.isAuthenticated(), userToken: userToken, currentUser: populatedUser});
+    })
+    .catch(err => {
+      return res.status(500).json({success: false, err: err, auth: req.isAuthenticated()});
+    })
   },
   (err, req, res) => {
-    return res.status(401).json({success: false, err, auth: req.isAuthenticated()});
+    return res.status(500).json({success: false, err: err, auth: req.isAuthenticated()});
   }
 );
 
@@ -44,6 +53,7 @@ router.post('/register', (req, res) => {
         username: req.body.username,
         hash: hash,
         salt: salt,
+        food_logs: [],
     })
     newUser.save()
       .then(result => {
