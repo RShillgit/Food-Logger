@@ -51,6 +51,7 @@ router.post('/register', (req, res) => {
     // Create user with salt and hash
     const newUser = new User({
         username: req.body.username,
+        calorie_budget: 2000,
         hash: hash,
         salt: salt,
         food_logs: [],

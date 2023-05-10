@@ -213,6 +213,42 @@ function App(props) {
 
   }, [foodSearchOptions, searchedFoods, selectedFoodItem, nutritionFactsDisplay])
 
+  const calcCaloriesRemaining = () => {
+
+  }
+
+  // Calculates calories for calories remaining and each meal
+  const calculateCalories = (identifier) => {
+
+    if (foodLog) {
+
+      let calculatedCals;
+
+      if (identifier === 'remaining') {
+        const breakfastCals = foodLog.breakfast.reduce((acc, obj) => acc + obj.total_calories, 0);
+        const lunchCals = foodLog.lunch.reduce((acc, obj) => acc + obj.total_calories, 0);
+        const dinnerCals = foodLog.dinner.reduce((acc, obj) => acc + obj.total_calories, 0);
+        const snackCals = foodLog.snack.reduce((acc, obj) => acc + obj.total_calories, 0);
+
+        calculatedCals = (user.calorie_budget - breakfastCals - lunchCals - dinnerCals - snackCals);
+      }
+      else if (identifier === 'breakfast') {
+        calculatedCals = foodLog.breakfast.reduce((acc, obj) => acc + obj.total_calories, 0);
+      }
+      else if (identifier === 'lunch') {
+        calculatedCals = foodLog.lunch.reduce((acc, obj) => acc + obj.total_calories, 0);
+      }
+      else if (identifier === 'dinner') {
+        calculatedCals = foodLog.dinner.reduce((acc, obj) => acc + obj.total_calories, 0);
+      }
+      else if (identifier === 'snack') {
+        calculatedCals = foodLog.snack.reduce((acc, obj) => acc + obj.total_calories, 0);
+      }
+
+      return (calculatedCals);
+    }
+  }
+
   // Opens Meal Associated Modal
   const openMealModal = (modalID) => {
     const selectedModal = document.getElementById(modalID);
@@ -528,11 +564,11 @@ function App(props) {
           </div>
 
           <div className='caloriesRemaining'>
-            <h2>Calories Remaining: {caloriesRemaining}</h2>
+            <h2>Calories Remaining: {calculateCalories('remaining')}</h2>
           </div>
 
           <div className='mealOverview' onClick={() => openMealModal('breakfastModal')}>
-            <p>Breakfast {breakfastCalories}</p>
+            <p>Breakfast {calculateCalories('breakfast')} cals</p>
           </div>
           <dialog id='breakfastModal'>
             <button onClick={() => closeMealModal('breakfastModal')}>X</button>
@@ -543,7 +579,7 @@ function App(props) {
           </dialog>
 
           <div className='mealOverview' onClick={() => openMealModal('lunchModal')}>
-            <p>Lunch {lunchCalories}</p>
+            <p>Lunch {calculateCalories('lunch')} cals</p>
           </div>
           <dialog id='lunchModal'>
             <button onClick={() => closeMealModal('lunchModal')}>X</button>
@@ -554,7 +590,7 @@ function App(props) {
           </dialog>
 
           <div className='mealOverview' onClick={() => openMealModal('dinnerModal')}>
-            <p>Dinner {dinnerCalories}</p>
+            <p>Dinner {calculateCalories('dinner')} cals</p>
           </div>
           <dialog id='dinnerModal'>
             <button onClick={() => closeMealModal('dinnerModal')}>X</button>
@@ -565,7 +601,7 @@ function App(props) {
           </dialog>
 
           <div className='mealOverview' onClick={() => openMealModal('snackModal')}>
-            <p>Snack {snackCalories}</p>
+            <p>Snack {calculateCalories('snack')} cals</p>
           </div>
           <dialog id='snackModal'>
             <button onClick={() => closeMealModal('snackModal')}>X</button>
