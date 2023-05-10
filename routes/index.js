@@ -179,7 +179,7 @@ router.post('/logs/:logID',
 
 // Delete food item from a meal
 router.delete('/logs/:logID/:meal/:uniqueID/:foodID',
-passport.authenticate('jwt', {session: false}), 
+  passport.authenticate('jwt', {session: false}), 
   (req, res) => {
 
     // Find the log
@@ -213,6 +213,31 @@ passport.authenticate('jwt', {session: false}),
       .catch(err => {
         return res.status(500).json({success: false, error: err, auth: req.isAuthenticated()});
       })
+    })
+    .catch(err => {
+      return res.status(500).json({success: false, error: err, auth: req.isAuthenticated()});
+    })
+
+  },
+  (req, res) => {
+    return res.status(401).json({success: false, error: 'Unauthenticated', auth: req.isAuthenticated()});
+  }
+)
+
+// Update daily calorie budget
+router.put('/users/:userID',
+  passport.authenticate('jwt', {session: false}), 
+  (req, res) => {
+
+    // Find user
+    User.findByIdAndUpdate(req.user._id,
+      {
+        calorie_budget: req.body.editedCalories
+      }, 
+      {new: true}
+    )
+    .then(updatedUser => {
+      return res.status(200).json({success: true, updatedUser: updatedUser, auth: req.isAuthenticated()});
     })
     .catch(err => {
       return res.status(500).json({success: false, error: err, auth: req.isAuthenticated()});

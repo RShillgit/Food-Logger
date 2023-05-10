@@ -23,6 +23,9 @@ function App(props) {
   const [dinnerCalories, setDinnerCalories] = useState(0);
   const [snackCalories, setSnackCalories] = useState(0);
 
+  const [calorieEditing, setCalorieEditing] = useState(false);
+  const [dailyCalorieBudget, setDailyCalorieBudget] = useState(0)
+
   /* Macros */
   const [carbCount, setCarbCount] = useState(0);
   const [fatCount, setFatCount] = useState(0);
@@ -421,9 +424,6 @@ function App(props) {
   // Deletes an existing food item
   const deleteFoodItem = (meal, item) => {
 
-    console.log("item", item)
-    console.log("meal", meal)
-
     fetch(`${props.serverURL}/logs/${foodLog._id}/${meal}/${item._id}/${item.foodId}`, {
       method: 'DELETE',
       headers: { 
@@ -434,13 +434,42 @@ function App(props) {
     })
     .then(res => res.json())
     .then(data => {
-      console.log(data)
       if(data.success) {
         setFoodLog(data.newFoodLog)
       }
     })
     .catch(err => console.log(err))
+  }
 
+  // Edits daily calorie budget
+  const editCalorieBudget = (e) => {
+    e.preventDefault();
+
+    console.log(dailyCalorieBudget)
+
+    fetch(`${props.serverURL}/users/${user._id}`, {
+      method: 'PUT',
+      headers: { 
+        "Content-Type": "application/json",
+        Authorization: cookie.token
+      },
+      mode: 'cors',
+      body: JSON.stringify(
+        {
+          editedCalories: dailyCalorieBudget
+        }
+      )
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data)
+
+      if (data.success) {
+        setUser(data.updatedUser)
+        setCalorieEditing(false)
+      }
+    })
+    .catch(err => console.log(err))
   }
 
   // Displays existing foods based on the selected meal
@@ -590,7 +619,25 @@ function App(props) {
           </div>
 
           <div className='caloriesRemaining'>
-            <h2>Calories Remaining: {calculateCalories('remaining')}</h2>
+            {(calorieEditing)
+              ?
+              <>
+                <form id='editCalorieBudget' onSubmit={editCalorieBudget}>
+                  <input type="number" value={dailyCalorieBudget} onChange={(e) => setDailyCalorieBudget(e.target.value)} min={1}/>
+                </form>
+                <button onClick={() => setCalorieEditing(false)}>Cancel</button>
+                <button form='editCalorieBudget' type='submit'>Edit</button>
+              </>
+              :
+              <>
+                <h2>Calories Remaining: {calculateCalories('remaining')}</h2>
+                <button onClick={() => {
+                  setDailyCalorieBudget(calculateCalories('remaining'))
+                  setCalorieEditing(true)
+                }}>Edit</button>
+              </>
+            }
+            
           </div>
 
           <div className='mealOverview' onClick={() => openMealModal('breakfastModal')}>
