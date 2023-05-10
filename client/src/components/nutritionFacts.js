@@ -5,10 +5,15 @@ const NutritionFacts = (props) => {
 
     const [quantity, setQuantity] = useState(1);
 
-    // Anytime the quantity changes render new values
+    // On mount
     useEffect(() => {
 
-    }, [quantity])
+        // Set number of servings
+        if (props.serving_number) {
+            setQuantity(props.serving_number)
+        }
+
+    }, [])
 
     return (
         <div className="nutritionFacts">
@@ -226,18 +231,34 @@ const NutritionFacts = (props) => {
                         }
                     </div>
 
-                    <button onClick={() => {
-                        const stats = {
-                            calories: Math.round(props.facts.calories * quantity),
-                            carbs: Math.round(props.facts.totalNutrients.CHOCDF.quantity * quantity),
-                            fats: Math.round(props.facts.totalNutrients.FAT.quantity * quantity),
-                            proteins: Math.round(props.facts.totalNutrients.PROCNT.quantity * quantity),
-                            quantity: quantity,
-                            units: props.measurement
-                        }
-
-                        props.logFoodItem(stats)
-                    }}>Log Food</button>
+                    {props.editingStatus
+                        ? 
+                        <button onClick={() => {
+                            const stats = {
+                                calories: Math.round(props.facts.calories * quantity),
+                                carbs: Math.round(props.facts.totalNutrients.CHOCDF.quantity * quantity),
+                                fats: Math.round(props.facts.totalNutrients.FAT.quantity * quantity),
+                                proteins: Math.round(props.facts.totalNutrients.PROCNT.quantity * quantity),
+                                quantity: quantity,
+                                units: props.measurement,
+                                uri: props.uri
+                            }
+                            props.updateFoodItem(stats)
+                        }}>Update</button>
+                        :
+                        <button onClick={() => {
+                            const stats = {
+                                calories: Math.round(props.facts.calories * quantity),
+                                carbs: Math.round(props.facts.totalNutrients.CHOCDF.quantity * quantity),
+                                fats: Math.round(props.facts.totalNutrients.FAT.quantity * quantity),
+                                proteins: Math.round(props.facts.totalNutrients.PROCNT.quantity * quantity),
+                                quantity: quantity,
+                                units: props.measurement,
+                                uri: props.uri
+                            }
+                            props.logFoodItem(stats)
+                        }}>Log Food</button>
+                    }
                 </>
                 :<></>
             }

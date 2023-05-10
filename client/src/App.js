@@ -38,6 +38,7 @@ function App(props) {
   const [searchedFoods, setSearchedFoods] = useState([])
   const [selectedFoodItem, setSelectedFoodItem] = useState();
   const [nutritionFactsDisplay, setNutritionFactsDisplay] = useState();
+  const [editingFoodItem, setEditingFoodItem] = useState();
 
   // Anytime the cookie changes, set auth
   useEffect(() => {
@@ -109,7 +110,6 @@ function App(props) {
 
     // If a food object exists render it
     if(foodLog) {
-      console.log(foodLog)
     }
 
     // Else render normal display
@@ -133,17 +133,62 @@ function App(props) {
 
   }, [auth])
 
-  // Anytime food search variables change set proper modal display
+  // Set proper modal display
   useEffect(() => {
 
+    // If there is an editing food item, display edit item modal
+    if(editingFoodItem) {
+      console.log(editingFoodItem)
+
+      // If there is no nutrtition facts generate an initial one
+      if(!nutritionFactsDisplay) {
+        getInitialNutrtitionFacts(editingFoodItem.foodId, editingFoodItem.measures, editingFoodItem.serving_number, editingFoodItem.serving_units,  editingFoodItem.initial_measures_uri)
+      }
+
+      setModalFoodDisplay(
+        <div className='editFoodItem'>
+
+          <button onClick={() => {
+            setEditingFoodItem();
+            setNutritionFactsDisplay();
+          }}>{"<"}</button>
+
+          {editingFoodItem.image
+            ?<img src={editingFoodItem.image} alt=''/>
+            :<></>
+          }
+          
+          <h1>{editingFoodItem.label}</h1>
+
+          {editingFoodItem.measures.map((measure, i) => {
+            return (
+              <button className='foodUnitSelect' value={measure.label} key={i} 
+                onClick={(e) => getNutritionFromMeasurement(e, measure.uri, editingFoodItem.foodId, editingFoodItem.serving_number, true)}>
+                {measure.label}
+              </button>
+            )
+          })}
+
+          {nutritionFactsDisplay}
+        </div>
+      )
+    }
+
     // If there is a selected food item, display that item
-    if (selectedFoodItem) {
-      console.log(selectedFoodItem)
+    else if (selectedFoodItem) {
+
+      // If there is no nutrtition facts generate an initial one
+      if(!nutritionFactsDisplay) {
+        console.log(selectedFoodItem)
+        getInitialNutrtitionFacts(selectedFoodItem.food.foodId, selectedFoodItem.measures, 1, selectedFoodItem.measures[0].label,  selectedFoodItem.measures[0].uri)
+      }
+
       setModalFoodDisplay(
         <div className='individualFoodItem'>
 
           <button onClick={() => {
             setSelectedFoodItem();
+            setNutritionFactsDisplay();
           }}>{"<"}</button>
 
           {selectedFoodItem.food.image
@@ -156,7 +201,7 @@ function App(props) {
           {selectedFoodItem.measures.map((measure, i) => {
             return (
               <button className='foodUnitSelect' value={measure.label} key={i} 
-                onClick={(e) => getNutritionFromMeasurement(e, measure.uri, selectedFoodItem.food.foodId)}>
+                onClick={(e) => getNutritionFromMeasurement(e, measure.uri, selectedFoodItem.food.foodId, 1, false)}>
                 {measure.label}
               </button>
             )
@@ -169,7 +214,6 @@ function App(props) {
 
     // Else if there is a list of searched foods display them
     else if (searchedFoods.length > 0) {
-      console.log(searchedFoods)
       setModalFoodDisplay(
         <div className='searchedFoodItems'>
             {searchedFoods.map((foodItem, i) => {
@@ -214,7 +258,7 @@ function App(props) {
       setModalFoodDisplay();
     }
 
-  }, [foodSearchOptions, searchedFoods, selectedFoodItem, nutritionFactsDisplay])
+  }, [foodSearchOptions, searchedFoods, selectedFoodItem, nutritionFactsDisplay, editingFoodItem])
 
   // Calculates calories for calories remaining and each meal
   const calculateCalories = (identifier) => {
@@ -267,6 +311,7 @@ function App(props) {
     setSearchedFoods([]);
     setSelectedFoodItem();
     setNutritionFactsDisplay();
+    setEditingFoodItem();
 
     const selectedModal = document.getElementById(modalID);
     selectedModal.close();
@@ -305,8 +350,37 @@ function App(props) {
     setSelectedFoodItem(foodItem);
   }
 
+  // Gets initial nutrtion facts
+  const getInitialNutrtitionFacts = (foodID, measures, servings, units, initialURI) => {
+
+    // Get info from uri
+    fetch(`https://api.edamam.com/api/food-database/v2/nutrients?app_id=${process.env.REACT_APP_API_ID}&app_key=${process.env.REACT_APP_API_KEY}`, {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        "ingredients": [
+          {
+            "quantity": Number(servings),
+            "measureURI": initialURI,
+            "foodId": foodID
+          }
+        ]
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+
+      console.log(data)
+
+      // Display food label
+      setNutritionFactsDisplay(generateNutritionFacts(data, initialURI, units, servings, true));
+    })
+    .catch(err => console.log(err))
+
+  }
+
   // Gets nutrition information based off measurement
-  const getNutritionFromMeasurement = (e, uri, foodId) => {
+  const getNutritionFromMeasurement = (e, uri, foodId, quantity, editingStatus) => {
 
     // Enable all buttons
     const foodUnitButtons = document.querySelectorAll('.foodUnitSelect');
@@ -322,7 +396,7 @@ function App(props) {
       body: JSON.stringify({
         "ingredients": [
           {
-            "quantity": 1,
+            "quantity": Number(quantity),
             "measureURI": uri,
             "foodId": foodId
           }
@@ -331,19 +405,18 @@ function App(props) {
     })
     .then(res => res.json())
     .then(data => {
-
-      console.log(data)
+      console.log(data);
 
       // Display food label
-      setNutritionFactsDisplay(generateNutritionFacts(data, e.target.value));
+      setNutritionFactsDisplay(generateNutritionFacts(data, uri, e.target.value, quantity, editingStatus));
 
     })
     .catch(err => console.log(err))
   }
 
   // Generates Nutrition Facts 
-  const generateNutritionFacts = (facts, measurement) => {
-    return (<NutritionFacts facts={facts} measurement={measurement} logFoodItem={logFoodItem}/>);
+  const generateNutritionFacts = (facts, uri, measurement, serving_number, editingStatus) => {
+    return (<NutritionFacts facts={facts} uri={uri} serving_number={Number(serving_number)} measurement={measurement} logFoodItem={logFoodItem} updateFoodItem={updateFoodItem} editingStatus={editingStatus}/>);
   }
 
   // Logs food item
@@ -354,6 +427,8 @@ function App(props) {
       foodId : selectedFoodItem.food.foodId,
       label: selectedFoodItem.food.label,
       image: selectedFoodItem.food.image,
+      measures: selectedFoodItem.measures,
+      initial_measures_uri: stats.uri,
       total_calories: stats.calories,
       total_fats: stats.fats,
       total_carbs: stats.carbs,
@@ -385,9 +460,16 @@ function App(props) {
         setSelectedFoodItem();
         setFoodSearchOptions([]);
         setSearchedFoods([]);
+        setNutritionFactsDisplay();
+        setEditingFoodItem();
       }
     })
     .catch(err => console.log(err))
+  }
+
+  // Updates food item
+  const updateFoodItem = (stats) => {
+    console.log(stats)
   }
 
   // TODO: Go back a day
@@ -472,6 +554,11 @@ function App(props) {
     .catch(err => console.log(err))
   }
 
+  // Edit a food item
+  const editExistingFoodItem = (foodItem) => {
+    setEditingFoodItem(foodItem)
+  }
+
   // Displays existing foods based on the selected meal
   const displayExistingFoods = (meal) => {
 
@@ -484,7 +571,7 @@ function App(props) {
               {foodLog.breakfast.map(food => {
                 return (
                   <div className='individualExistingFood' key={uuidv4()}>
-                    <div className='left'>
+                    <div className='left' onClick={() => editExistingFoodItem(food)}>
                       {food.image
                         ? <img src={food.image} alt=""/>
                         :<></>
