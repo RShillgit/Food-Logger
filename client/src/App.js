@@ -138,11 +138,10 @@ function App(props) {
 
     // If there is an editing food item, display edit item modal
     if(editingFoodItem) {
-      console.log(editingFoodItem)
 
       // If there is no nutrtition facts generate an initial one
       if(!nutritionFactsDisplay) {
-        getInitialNutrtitionFacts(editingFoodItem.foodId, editingFoodItem.measures, editingFoodItem.serving_number, editingFoodItem.serving_units,  editingFoodItem.initial_measures_uri)
+        getInitialNutrtitionFacts(editingFoodItem.foodId, editingFoodItem.serving_number, editingFoodItem.serving_units,  editingFoodItem.initial_measures_uri, true, editingFoodItem)
       }
 
       setModalFoodDisplay(
@@ -163,7 +162,7 @@ function App(props) {
           {editingFoodItem.measures.map((measure, i) => {
             return (
               <button className='foodUnitSelect' value={measure.label} key={i} 
-                onClick={(e) => getNutritionFromMeasurement(e, measure.uri, editingFoodItem.foodId, editingFoodItem.serving_number, true)}>
+                onClick={(e) => getNutritionFromMeasurement(e, measure.uri, editingFoodItem.foodId, editingFoodItem.serving_number, true, editingFoodItem)}>
                 {measure.label}
               </button>
             )
@@ -179,8 +178,7 @@ function App(props) {
 
       // If there is no nutrtition facts generate an initial one
       if(!nutritionFactsDisplay) {
-        console.log(selectedFoodItem)
-        getInitialNutrtitionFacts(selectedFoodItem.food.foodId, selectedFoodItem.measures, 1, selectedFoodItem.measures[0].label,  selectedFoodItem.measures[0].uri)
+        getInitialNutrtitionFacts(selectedFoodItem.food.foodId, 1, selectedFoodItem.measures[0].label,  selectedFoodItem.measures[0].uri, false)
       }
 
       setModalFoodDisplay(
@@ -351,7 +349,7 @@ function App(props) {
   }
 
   // Gets initial nutrtion facts
-  const getInitialNutrtitionFacts = (foodID, measures, servings, units, initialURI) => {
+  const getInitialNutrtitionFacts = (foodID, servings, units, initialURI, editingStatus, foodItemBeingEdited) => {
 
     // Get info from uri
     fetch(`https://api.edamam.com/api/food-database/v2/nutrients?app_id=${process.env.REACT_APP_API_ID}&app_key=${process.env.REACT_APP_API_KEY}`, {
@@ -360,7 +358,7 @@ function App(props) {
       body: JSON.stringify({
         "ingredients": [
           {
-            "quantity": Number(servings),
+            "quantity": 1,
             "measureURI": initialURI,
             "foodId": foodID
           }
@@ -370,17 +368,15 @@ function App(props) {
     .then(res => res.json())
     .then(data => {
 
-      console.log(data)
-
       // Display food label
-      setNutritionFactsDisplay(generateNutritionFacts(data, initialURI, units, servings, true));
+      setNutritionFactsDisplay(generateNutritionFacts(data, initialURI, units, servings, editingStatus, foodItemBeingEdited));
     })
     .catch(err => console.log(err))
 
   }
 
   // Gets nutrition information based off measurement
-  const getNutritionFromMeasurement = (e, uri, foodId, quantity, editingStatus) => {
+  const getNutritionFromMeasurement = (e, uri, foodId, quantity, editingStatus, editingItem) => {
 
     // Enable all buttons
     const foodUnitButtons = document.querySelectorAll('.foodUnitSelect');
@@ -396,7 +392,7 @@ function App(props) {
       body: JSON.stringify({
         "ingredients": [
           {
-            "quantity": Number(quantity),
+            "quantity": 1,
             "measureURI": uri,
             "foodId": foodId
           }
@@ -405,18 +401,17 @@ function App(props) {
     })
     .then(res => res.json())
     .then(data => {
-      console.log(data);
 
       // Display food label
-      setNutritionFactsDisplay(generateNutritionFacts(data, uri, e.target.value, quantity, editingStatus));
+      setNutritionFactsDisplay(generateNutritionFacts(data, uri, e.target.value, quantity, editingStatus, editingItem));
 
     })
     .catch(err => console.log(err))
   }
 
   // Generates Nutrition Facts 
-  const generateNutritionFacts = (facts, uri, measurement, serving_number, editingStatus) => {
-    return (<NutritionFacts facts={facts} uri={uri} serving_number={Number(serving_number)} measurement={measurement} logFoodItem={logFoodItem} updateFoodItem={updateFoodItem} editingStatus={editingStatus}/>);
+  const generateNutritionFacts = (facts, uri, measurement, serving_number, editingStatus, editingFoodItem) => {
+    return (<NutritionFacts facts={facts} uri={uri} serving_number={Number(serving_number)} measurement={measurement} logFoodItem={logFoodItem} updateFoodItem={updateFoodItem} editingStatus={editingStatus} editingFoodItem={editingFoodItem}/>);
   }
 
   // Logs food item
@@ -453,7 +448,6 @@ function App(props) {
     })
     .then(res => res.json())
     .then(data => {
-      console.log(data)
 
       if (data.success) {
         setFoodLog(data.updatedFoodLog);
@@ -469,7 +463,46 @@ function App(props) {
 
   // Updates food item
   const updateFoodItem = (stats) => {
-    console.log(stats)
+
+    const updates = {
+      initial_measures_uri: stats.uri,
+      total_calories: stats.calories,
+      total_fats: stats.fats,
+      total_carbs: stats.carbs,
+      total_proteins: stats.proteins,
+      serving_number: stats.quantity,
+      serving_units: stats.units
+    }
+
+    fetch(`${props.serverURL}/logs/${foodLog._id}`, {
+      method: 'PUT',
+      headers: { 
+        "Content-Type": "application/json",
+        Authorization: cookie.token
+      },
+      mode: 'cors',
+      body: JSON.stringify(
+        {
+          meal: selectedMeal,
+          foodId: stats.foodId,
+          _id: stats._id,
+          updates
+        }
+      )
+    })
+    .then(res => res.json())
+    .then(data => {
+
+      if (data.success) {
+        setFoodLog(data.updatedFoodLog);
+        setSelectedFoodItem();
+        setFoodSearchOptions([]);
+        setSearchedFoods([]);
+        setNutritionFactsDisplay();
+        setEditingFoodItem();
+      }
+    })
+    .catch(err => console.log(err))
   }
 
   // TODO: Go back a day
@@ -527,8 +560,6 @@ function App(props) {
   const editCalorieBudget = (e) => {
     e.preventDefault();
 
-    console.log(dailyCalorieBudget)
-
     fetch(`${props.serverURL}/users/${user._id}`, {
       method: 'PUT',
       headers: { 
@@ -544,7 +575,6 @@ function App(props) {
     })
     .then(res => res.json())
     .then(data => {
-      console.log(data)
 
       if (data.success) {
         setUser(data.updatedUser)
@@ -603,7 +633,7 @@ function App(props) {
               {foodLog.lunch.map(food => {
                 return (
                   <div className='individualExistingFood' key={uuidv4()}>
-                    <div className='left'>
+                    <div className='left' onClick={() => editExistingFoodItem(food)}>
                       {food.image
                         ? <img src={food.image} alt=""/>
                         :<></>
@@ -635,7 +665,7 @@ function App(props) {
               {foodLog.dinner.map(food => {
                 return (
                   <div className='individualExistingFood' key={uuidv4()}>
-                    <div className='left'>
+                    <div className='left' onClick={() => editExistingFoodItem(food)}>
                       {food.image
                         ? <img src={food.image} alt=""/>
                         :<></>
@@ -667,7 +697,7 @@ function App(props) {
               {foodLog.snack.map(food => {
                 return (
                   <div className='individualExistingFood' key={uuidv4()}>
-                    <div className='left'>
+                    <div className='left' onClick={() => editExistingFoodItem(food)}>
                       {food.image
                         ? <img src={food.image} alt=""/>
                         :<></>

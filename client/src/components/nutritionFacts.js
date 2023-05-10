@@ -235,6 +235,8 @@ const NutritionFacts = (props) => {
                         ? 
                         <button onClick={() => {
                             const stats = {
+                                foodId: props.editingFoodItem.foodId,
+                                _id: props.editingFoodItem._id,
                                 calories: Math.round(props.facts.calories * quantity),
                                 carbs: Math.round(props.facts.totalNutrients.CHOCDF.quantity * quantity),
                                 fats: Math.round(props.facts.totalNutrients.FAT.quantity * quantity),

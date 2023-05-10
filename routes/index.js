@@ -177,6 +177,57 @@ router.post('/logs/:logID',
   }
 )
 
+// Update food item
+router.put('/logs/:logID',
+  passport.authenticate('jwt', {session: false}), 
+  (req, res) => {
+
+    // Get the food log
+    FoodLog.findById(req.params.logID)
+    .then((log) => {
+
+      // Get the correct meal array
+      let mealArray;
+      if (req.body.meal === 'breakfast') mealArray = log.breakfast;
+      else if (req.body.meal === 'lunch') mealArray = log.lunch;
+      else if (req.body.meal === 'dinner') mealArray = log.dinner;
+      else if (req.body.meal === 'snack') mealArray = log.snack;
+
+      // Find and update the food item
+      const foodIndex = mealArray.findIndex(item => item.foodId === req.body.foodId && item._id === req.body._id)
+      const foodItem = mealArray[foodIndex];
+
+      foodItem.initial_measures_uri = req.body.updates.initial_measures_uri;
+      foodItem.total_calories = req.body.updates.total_calories
+      foodItem.total_fats = req.body.updates.total_fats
+      foodItem.total_carbs = req.body.updates.total_carbs
+      foodItem.total_proteins = req.body.updates.total_proteins
+      foodItem.serving_number = req.body.updates.serving_number
+      foodItem.serving_units = req.body.updates.serving_units
+
+      // Update the food log
+      FoodLog.findByIdAndUpdate(req.params.logID,
+        {
+          [req.body.meal]: mealArray
+        }, 
+        {new: true}
+      )
+      .then(updatedFoodLog => {     
+        return res.status(200).json({success: true, auth: req.isAuthenticated(), updatedFoodLog: updatedFoodLog});
+      })
+      .catch(err => {
+        return res.status(500).json({success: false, error: err, auth: req.isAuthenticated()});
+      })
+    })
+    .catch(err => {
+      return res.status(500).json({success: false, error: err, auth: req.isAuthenticated()});
+    })
+  },
+  (req, res) => {
+    return res.status(401).json({success: false, error: 'Unauthenticated', auth: req.isAuthenticated()});
+  }
+)
+
 // Delete food item from a meal
 router.delete('/logs/:logID/:meal/:uniqueID/:foodID',
   passport.authenticate('jwt', {session: false}), 
