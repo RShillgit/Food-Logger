@@ -135,6 +135,47 @@ router.get('/guest', (req, res, next) => {
     })
 })
 
+// Log food item
+router.post('/logs/:logID', 
+  passport.authenticate('jwt', {session: false}), 
+  (req, res) => {
+
+    // Get the food log
+    FoodLog.findById(req.params.logID)
+    .then((log) => {
+
+      // Add food to meal array
+      let mealArray;
+      if (req.body.meal === 'breakfast') mealArray = log.breakfast;
+      else if (req.body.meal === 'lunch') mealArray = log.lunch;
+      else if (req.body.meal === 'dinner') mealArray = log.dinner;
+      else if (req.body.meal === 'snack') mealArray = log.snack;
+      mealArray.push(req.body.foodItem)
+
+      // Update food log
+      FoodLog.findByIdAndUpdate(req.params.logID, 
+        {
+          [req.body.meal]: mealArray 
+        },
+        {new: true}
+      )
+      .then(updatedFoodLog => {
+        return res.status(200).json({success: true, auth: req.isAuthenticated(), updatedFoodLog: updatedFoodLog});
+      })
+      .catch(err => {
+        return res.status(500).json({success: false, error: err, auth: req.isAuthenticated()});
+      })
+
+    })
+    .catch(err => {
+      return res.status(500).json({success: false, error: err, auth: req.isAuthenticated()});
+    })
+  },
+  (req, res) => {
+    return res.status(500).json({success: false, error: 'Unable to log food item', auth: req.isAuthenticated()});
+  }
+)
+
 // Function that returns a random string
 function randomString() {
   const randomString = crypto.randomBytes(20).toString('hex');

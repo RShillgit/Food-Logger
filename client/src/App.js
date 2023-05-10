@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import {useCookies} from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './components/navbar';
 import NutritionFacts from './components/nutritionFacts';
+import { v4 as uuidv4 } from 'uuid'
 
 function App(props) {
 
@@ -28,6 +29,7 @@ function App(props) {
   const [proteinCount, setProteinCount] = useState(0);
 
   /* Food Search & Display */
+  const [selectedMeal, setSelectedMeal] = useState('');
   const [modalFoodDisplay, setModalFoodDisplay] = useState();
   const [foodSearchOptions, setFoodSearchOptions] = useState([]);
   const [searchedFoods, setSearchedFoods] = useState([])
@@ -214,6 +216,12 @@ function App(props) {
   // Opens Meal Associated Modal
   const openMealModal = (modalID) => {
     const selectedModal = document.getElementById(modalID);
+
+    if(modalID === 'breakfastModal') setSelectedMeal('breakfast');
+    else if(modalID === 'lunchModal') setSelectedMeal('lunch');
+    else if(modalID === 'dinnerModal') setSelectedMeal('dinner');
+    else if(modalID === 'snackModal') setSelectedMeal('snack');
+
     selectedModal.showModal();
   }
 
@@ -304,21 +312,45 @@ function App(props) {
   }
 
   // TODO: Logs food item
-  const logFoodItem = (item) => {
+  const logFoodItem = (item, stats) => {
 
-    /* Need Some sort of object to send to the backend */
-    /*
-      foodItem = {
-        _id,
-        servings: {quantity: 2, serving_units: 'g'}, -> That way we can get the food item and use the
-          quantity and servings to calculate the calories and such when viewing
-        ...All the api information
+    const foodItem = {
+      id : selectedFoodItem.food.foodId,
+      label: selectedFoodItem.food.label,
+      image: selectedFoodItem.food.image,
+      total_calories: stats.calories,
+      total_fats: stats.fats,
+      total_carbs: stats.carbs,
+      total_proteins: stats.proteins,
+      serving_number: stats.quantity,
+      serving_units: stats.units
+    }
+
+    fetch(`${props.serverURL}/logs/${foodLog._id}`, {
+      method: 'POST',
+      headers: { 
+        "Content-Type": "application/json",
+        Authorization: cookie.token
+      },
+      mode: 'cors',
+      body: JSON.stringify(
+        {
+          meal: selectedMeal,
+          foodItem
+        }
+      )
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data)
+      if (data.success) {
+        setFoodLog(data.updatedFoodLog);
+        setSelectedFoodItem();
+        setFoodSearchOptions([]);
+        setSearchedFoods([]);
       }
-    */
-
-    console.log("Log Item", item);
-
-    //fetch(`props.serverURL/logs/:logID/breakfast`)
+    })
+    .catch(err => console.log(err))
   }
 
   // TODO: Go back a day
@@ -363,7 +395,7 @@ function App(props) {
             <>
               {foodLog.breakfast.map(food => {
                 return (
-                  <p key={food.id}>{food.label}</p>
+                  <p key={uuidv4()}>{food.label}</p>
                 )
               })}
             </>
@@ -383,7 +415,7 @@ function App(props) {
             <>
               {foodLog.lunch.map(food => {
                 return (
-                  <p key={food.id}>{food.label}</p>
+                  <p key={uuidv4()}>{food.label}</p>
                 )
               })}
             </>
@@ -403,7 +435,7 @@ function App(props) {
             <>
               {foodLog.dinner.map(food => {
                 return (
-                  <p key={food.id}>{food.label}</p>
+                  <p key={uuidv4()}>{food.label}</p>
                 )
               })}             
             </>
@@ -423,7 +455,7 @@ function App(props) {
             <>
               {foodLog.snack.map(food => {
                 return (
-                  <p key={food.id}>{food.label}</p>
+                  <p key={uuidv4()}>{food.label}</p>
                 )
               })}  
             </>

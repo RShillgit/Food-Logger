@@ -226,7 +226,18 @@ const NutritionFacts = (props) => {
                         }
                     </div>
 
-                    <button onClick={() => props.logFoodItem(props.facts)}>Log Food</button>
+                    <button onClick={() => {
+                        const stats = {
+                            calories: Math.round(props.facts.calories * quantity),
+                            carbs: Math.round(props.facts.totalNutrients.CHOCDF.quantity * quantity),
+                            fats: Math.round(props.facts.totalNutrients.FAT.quantity * quantity),
+                            proteins: Math.round(props.facts.totalNutrients.PROCNT.quantity * quantity),
+                            quantity: quantity,
+                            units: props.measurement
+                        }
+
+                        props.logFoodItem(props.facts, stats)
+                    }}>Log Food</button>
                 </>
                 :<></>
             }
