@@ -22,6 +22,36 @@ const NutritionFacts = (props) => {
                 <> 
                     <div className="title">
                         <h1>Nutrition Facts</h1>
+                        {props.editingStatus
+                            ? 
+                            <button onClick={() => {
+                                const stats = {
+                                    foodId: props.editingFoodItem.foodId,
+                                    _id: props.editingFoodItem._id,
+                                    calories: Math.round(props.facts.calories * quantity),
+                                    carbs: Math.round(props.facts.totalNutrients.CHOCDF.quantity * quantity),
+                                    fats: Math.round(props.facts.totalNutrients.FAT.quantity * quantity),
+                                    proteins: Math.round(props.facts.totalNutrients.PROCNT.quantity * quantity),
+                                    quantity: quantity,
+                                    units: props.measurement,
+                                    uri: props.uri
+                                }
+                                props.updateFoodItem(stats)
+                            }}>Update</button>
+                            :
+                            <button onClick={() => {
+                                const stats = {
+                                    calories: Math.round(props.facts.calories * quantity),
+                                    carbs: Math.round(props.facts.totalNutrients.CHOCDF.quantity * quantity),
+                                    fats: Math.round(props.facts.totalNutrients.FAT.quantity * quantity),
+                                    proteins: Math.round(props.facts.totalNutrients.PROCNT.quantity * quantity),
+                                    quantity: quantity,
+                                    units: props.measurement,
+                                    uri: props.uri
+                                }
+                                props.logFoodItem(stats)
+                            }}>Log Food</button>
+                        }
                     </div>
 
                     <div className="servings">
@@ -230,37 +260,6 @@ const NutritionFacts = (props) => {
                             </div>
                         }
                     </div>
-
-                    {props.editingStatus
-                        ? 
-                        <button onClick={() => {
-                            const stats = {
-                                foodId: props.editingFoodItem.foodId,
-                                _id: props.editingFoodItem._id,
-                                calories: Math.round(props.facts.calories * quantity),
-                                carbs: Math.round(props.facts.totalNutrients.CHOCDF.quantity * quantity),
-                                fats: Math.round(props.facts.totalNutrients.FAT.quantity * quantity),
-                                proteins: Math.round(props.facts.totalNutrients.PROCNT.quantity * quantity),
-                                quantity: quantity,
-                                units: props.measurement,
-                                uri: props.uri
-                            }
-                            props.updateFoodItem(stats)
-                        }}>Update</button>
-                        :
-                        <button onClick={() => {
-                            const stats = {
-                                calories: Math.round(props.facts.calories * quantity),
-                                carbs: Math.round(props.facts.totalNutrients.CHOCDF.quantity * quantity),
-                                fats: Math.round(props.facts.totalNutrients.FAT.quantity * quantity),
-                                proteins: Math.round(props.facts.totalNutrients.PROCNT.quantity * quantity),
-                                quantity: quantity,
-                                units: props.measurement,
-                                uri: props.uri
-                            }
-                            props.logFoodItem(stats)
-                        }}>Log Food</button>
-                    }
                 </>
                 :<></>
             }

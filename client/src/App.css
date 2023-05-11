@@ -153,10 +153,11 @@ button {
     .modalContent {
         background-color: rgba(255, 255, 255, 0.3);
         padding: 1rem;
-        width: 40vw;
+        width: 50vw;
         min-width: 300px;
-        height: 50vh;
+        height: 60vh;
         overflow-y: auto;
+        scrollbar-gutter: stable both-edges;
     }
     .modalHeader {
         display: flex;
@@ -257,31 +258,45 @@ button {
 
     /* Individual Food Item */
     .individualFoodItem {
-        display: grid;
-        grid-template-columns: 50% 50%;
+        display: flex;
+        flex-direction: column;
     }
     .individualFoodItem .main {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        gap: 1rem;
+        min-height: 200px;
+    }
+    .individualFoodItem .main .modalBackButtonContainer {
+        margin-bottom: 0;
+        margin-top: 1rem;
+    }
+    .individualFoodItem .main header {
+        display: flex;
+        justify-content: center;
+        background-color: rgba(0, 0, 0, 0.5);
+        width: 100%;
     }
     .individualFoodItem .main .imageContainer {
         position: absolute;
         z-index: -1;
-        object-fit: cover;
-        width: 50%;
+        width: 100%;
         display: flex;
         overflow: hidden;
-        justify-content: left;
-        height: 70%;
+        left: 0;
+        height: calc(50vh - 130px);
     }
     .individualFoodItem .main img {
-        width: 100%;
-        height: 500px;
         object-fit: cover;
+        width: 100%;
     }
     .unitButtons {
         display: flex;
+        justify-content: center;
         overflow:auto;
+        gap: 8px;
         flex-wrap: wrap;
+        width: 100%;
+        margin-bottom: 1rem;
     }

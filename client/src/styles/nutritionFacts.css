@@ -3,12 +3,13 @@
     padding: 8px;
     background-color: white;
     color: black;
-    max-height: 40vh;
-    overflow-y: scroll;
 }
 
 /* Title */
 .nutritionFacts .title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     border-bottom: 1px solid black;
 }
 .nutritionFacts .title h1 {

@@ -156,28 +156,40 @@ function App(props) {
       }
 
       setModalFoodDisplay(
-        <div className='editFoodItem'>
+        <div className='individualFoodItem'>
 
-          <button onClick={() => {
-            setEditingFoodItem();
-            setNutritionFactsDisplay();
-          }}>{"<"}</button>
+          <div className='main'>
+            <div className='modalBackButtonContainer'>
+              <button onClick={() => {
+                setEditingFoodItem();
+                setNutritionFactsDisplay();
+              }}>{"<"}</button>
+            </div>
 
-          {editingFoodItem.image
-            ?<img src={editingFoodItem.image} alt=''/>
-            :<></>
-          }
-          
-          <h1>{editingFoodItem.label}</h1>
+            {editingFoodItem.image
+              ?
+              <div className='imageContainer'>
+                <img src={editingFoodItem.image} alt=''/>
+              </div>
+              :<></>
+            }
+            
+            <header>
+              <h1>{editingFoodItem.label}</h1>
+            </header>
 
-          {editingFoodItem.measures.map((measure, i) => {
-            return (
-              <button className='foodUnitSelect' value={measure.label} key={i} 
-                onClick={(e) => getNutritionFromMeasurement(e, measure.uri, editingFoodItem.foodId, editingFoodItem.serving_number, true, editingFoodItem)}>
-                {measure.label}
-              </button>
-            )
-          })}
+            <div className='unitButtons'>
+              {editingFoodItem.measures.map((measure, i) => {
+                return (
+                  <button className='foodUnitSelect' value={measure.label} key={i} 
+                    onClick={(e) => getNutritionFromMeasurement(e, measure.uri, editingFoodItem.foodId, editingFoodItem.serving_number, true, editingFoodItem)}>
+                    {measure.label}
+                  </button>
+                )
+              })}
+            </div>
+            
+          </div>
 
           {nutritionFactsDisplay}
         </div>
@@ -196,11 +208,14 @@ function App(props) {
         <div className='individualFoodItem'>
 
           <div className='main'>
-            <button onClick={() => {
-              setFoodSearchInput("");
-              setSelectedFoodItem();
-              setNutritionFactsDisplay();
-            }}>{"<"}</button>
+
+            <div className='modalBackButtonContainer'>
+              <button onClick={() => {
+                setFoodSearchInput("");
+                setSelectedFoodItem();
+                setNutritionFactsDisplay();
+              }}>{"<"}</button>
+            </div>
 
             {selectedFoodItem.food.image
               ?
@@ -209,8 +224,9 @@ function App(props) {
               </div>
               :<></>
             }
-            
-            <h1>{selectedFoodItem.food.label}</h1>
+            <header>
+              <h1>{selectedFoodItem.food.label}</h1>
+            </header>
 
             <div className='unitButtons'>
               {selectedFoodItem.measures.map((measure, i) => {
