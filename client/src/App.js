@@ -101,19 +101,48 @@ function App(props) {
       if (dateExists.length > 0) {
         setFoodLog(dateExists[0])
       }
+      // Else create a food log
+      else {
+        fetch(`${props.serverURL}/logs`, {
+          method: 'POST',
+          headers: { 
+            "Content-Type": "application/json",
+            Authorization: cookie.token
+          },
+          mode: 'cors',
+          body: JSON.stringify(
+            {
+              date: Date.now()
+            }
+          )
+        })
+        .then(res => res.json())
+        .then(data => {
+          setUser(data.updatedUser);
+          setFoodLog(data.newFoodLog);
+        })
+        .catch(err => console.log(err))
+      }
     }
 
   }, [logDate])
 
-  // On food log change
+  // TODO: On food log change
   useEffect(() => {
 
-    // If a food object exists render it
+    // Either set a state variable to display, 
+    // OR
+    // Conditionally render it in the return statement,
+    // Because I think another state varaible will start messing a lot of things up
+
+    // If a food log exists render it
     if(foodLog) {
+      
     }
 
-    // Else render normal display
+    // Else render empty food log
     else {
+      
     }
 
   }, [foodLog])
@@ -765,55 +794,63 @@ function App(props) {
             
           </div>
 
-          <div className='mealOverview' onClick={() => openMealModal('breakfastModal')}>
-            <p>Breakfast {calculateCalories('breakfast')} cals</p>
-          </div>
-          <dialog id='breakfastModal'>
-            <button onClick={() => closeMealModal('breakfastModal')}>X</button>
-            <h1>Breakfast</h1>
-            <input type="text" placeholder="Search a food" onChange={foodSearchAutocomplete} />
-            {displayExistingFoods('breakfast')}
-            {modalFoodDisplay}
-          </dialog>
+          {foodLog
+            ?
+            <>
+              <div className='mealOverview' onClick={() => openMealModal('breakfastModal')}>
+                <p>Breakfast {calculateCalories('breakfast')} cals</p>
+              </div>
+              <dialog id='breakfastModal'>
+                <button onClick={() => closeMealModal('breakfastModal')}>X</button>
+                <h1>Breakfast</h1>
+                <input type="text" placeholder="Search a food" onChange={foodSearchAutocomplete} />
+                {displayExistingFoods('breakfast')}
+                {modalFoodDisplay}
+              </dialog>
 
-          <div className='mealOverview' onClick={() => openMealModal('lunchModal')}>
-            <p>Lunch {calculateCalories('lunch')} cals</p>
-          </div>
-          <dialog id='lunchModal'>
-            <button onClick={() => closeMealModal('lunchModal')}>X</button>
-            <h1>Lunch</h1>
-            <input type="text" placeholder="Search a food" onChange={foodSearchAutocomplete} />
-            {displayExistingFoods('lunch')}
-            {modalFoodDisplay}
-          </dialog>
+              <div className='mealOverview' onClick={() => openMealModal('lunchModal')}>
+                <p>Lunch {calculateCalories('lunch')} cals</p>
+              </div>
+              <dialog id='lunchModal'>
+                <button onClick={() => closeMealModal('lunchModal')}>X</button>
+                <h1>Lunch</h1>
+                <input type="text" placeholder="Search a food" onChange={foodSearchAutocomplete} />
+                {displayExistingFoods('lunch')}
+                {modalFoodDisplay}
+              </dialog>
 
-          <div className='mealOverview' onClick={() => openMealModal('dinnerModal')}>
-            <p>Dinner {calculateCalories('dinner')} cals</p>
-          </div>
-          <dialog id='dinnerModal'>
-            <button onClick={() => closeMealModal('dinnerModal')}>X</button>
-            <h1>Dinner</h1>
-            <input type="text" placeholder="Search a food" onChange={foodSearchAutocomplete} />
-            {displayExistingFoods('dinner')}
-            {modalFoodDisplay}
-          </dialog>
+              <div className='mealOverview' onClick={() => openMealModal('dinnerModal')}>
+                <p>Dinner {calculateCalories('dinner')} cals</p>
+              </div>
+              <dialog id='dinnerModal'>
+                <button onClick={() => closeMealModal('dinnerModal')}>X</button>
+                <h1>Dinner</h1>
+                <input type="text" placeholder="Search a food" onChange={foodSearchAutocomplete} />
+                {displayExistingFoods('dinner')}
+                {modalFoodDisplay}
+              </dialog>
 
-          <div className='mealOverview' onClick={() => openMealModal('snackModal')}>
-            <p>Snack {calculateCalories('snack')} cals</p>
-          </div>
-          <dialog id='snackModal'>
-            <button onClick={() => closeMealModal('snackModal')}>X</button>
-            <h1>Snack</h1>
-            <input type="text" placeholder="Search a food" onChange={foodSearchAutocomplete} />
-            {displayExistingFoods('snack')}
-            {modalFoodDisplay}
-          </dialog>
+              <div className='mealOverview' onClick={() => openMealModal('snackModal')}>
+                <p>Snack {calculateCalories('snack')} cals</p>
+              </div>
+              <dialog id='snackModal'>
+                <button onClick={() => closeMealModal('snackModal')}>X</button>
+                <h1>Snack</h1>
+                <input type="text" placeholder="Search a food" onChange={foodSearchAutocomplete} />
+                {displayExistingFoods('snack')}
+                {modalFoodDisplay}
+              </dialog>
 
-          <div className='macroNutrient-stats'>
-            <p>Carbs {carbCount}g</p>
-            <p>Fat {fatCount}g</p>
-            <p>Protein {proteinCount}g</p>
-          </div>
+              <div className='macroNutrient-stats'>
+                <p>Carbs {carbCount}g</p>
+                <p>Fat {fatCount}g</p>
+                <p>Protein {proteinCount}g</p>
+              </div>           
+            </>
+            :
+            <h1>No Food Log</h1>
+          }
+
         </div>
         :<></>
       }

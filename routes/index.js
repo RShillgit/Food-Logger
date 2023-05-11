@@ -136,6 +136,49 @@ router.get('/guest', (req, res, next) => {
     })
 })
 
+// Create new food log
+router.post('/logs',
+  passport.authenticate('jwt', {session: false}), 
+  (req, res) => {
+
+    const newLog = new FoodLog({
+      parentUser: req.user._id,
+      breakfast: [],
+      lunch: [],
+      dinner: [],
+      snack: [],
+      date: req.body.date
+    })
+    newLog.save()
+    .then(newFoodLog => {
+
+      const usersFoodLogs = req.user.food_logs;
+      usersFoodLogs.push(newFoodLog);
+
+      // Add food log to users food_logs array
+      User.findByIdAndUpdate(req.user._id,
+        {
+          food_logs: usersFoodLogs
+        },
+        {new: true}  
+      )
+      .populate('food_logs')
+      .then(updatedUser => {
+        return res.status(200).json({success: true, auth: req.isAuthenticated(), updatedUser: updatedUser, newFoodLog: newFoodLog})
+      })
+      .catch(err => {
+        return res.status(500).json({success: false, auth: req.isAuthenticated(), err: err});
+      })
+    })
+    .catch(err => {
+      return res.status(500).json({success: false, auth: req.isAuthenticated(), err: err});
+    })
+  },
+  (req, res) => {
+    return res.status(401).json({success: false, error: 'Unauthenticated', auth: req.isAuthenticated()});
+  }
+)
+
 // Log food item
 router.post('/logs/:logID', 
   passport.authenticate('jwt', {session: false}), 
