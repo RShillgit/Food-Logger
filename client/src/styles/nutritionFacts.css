@@ -1,6 +1,10 @@
 .nutritionFacts {
     border: 1px solid black;
     padding: 8px;
+    background-color: white;
+    color: black;
+    max-height: 40vh;
+    overflow-y: scroll;
 }
 
 /* Title */
@@ -21,6 +25,14 @@
     margin: 8px 0 8px 0;
     font-weight: 600;
     font-size: x-large;
+}
+.nutritionFacts .servings input {
+    color: black;
+    width: 75px;
+    padding: 4px 8px 4px 8px;
+    color-scheme: none;
+    margin-top: 4px;
+    margin-bottom: 4px;
 }
 
 /* Calories */

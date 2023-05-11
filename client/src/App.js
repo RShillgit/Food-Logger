@@ -195,27 +195,34 @@ function App(props) {
       setModalFoodDisplay(
         <div className='individualFoodItem'>
 
-          <button onClick={() => {
-            setFoodSearchInput("");
-            setSelectedFoodItem();
-            setNutritionFactsDisplay();
-          }}>{"<"}</button>
+          <div className='main'>
+            <button onClick={() => {
+              setFoodSearchInput("");
+              setSelectedFoodItem();
+              setNutritionFactsDisplay();
+            }}>{"<"}</button>
 
-          {selectedFoodItem.food.image
-            ?<img src={selectedFoodItem.food.image} alt=''/>
-            :<></>
-          }
-          
-          <h1>{selectedFoodItem.food.label}</h1>
+            {selectedFoodItem.food.image
+              ?
+              <div className='imageContainer'>
+                <img src={selectedFoodItem.food.image} alt=''/>
+              </div>
+              :<></>
+            }
+            
+            <h1>{selectedFoodItem.food.label}</h1>
 
-          {selectedFoodItem.measures.map((measure, i) => {
-            return (
-              <button className='foodUnitSelect' value={measure.label} key={i} 
-                onClick={(e) => getNutritionFromMeasurement(e, measure.uri, selectedFoodItem.food.foodId, 1, false)}>
-                {measure.label}
-              </button>
-            )
-          })}
+            <div className='unitButtons'>
+              {selectedFoodItem.measures.map((measure, i) => {
+                return (
+                  <button className='foodUnitSelect' value={measure.label} key={i} 
+                    onClick={(e) => getNutritionFromMeasurement(e, measure.uri, selectedFoodItem.food.foodId, 1, false)}>
+                    {measure.label}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
 
           {nutritionFactsDisplay}
         </div>
@@ -227,29 +234,36 @@ function App(props) {
       setModalFoodDisplay(
         <div className='searchedFoodItems'>
 
-          <button onClick={() => {
-            setSearchedFoods([]);
-          }}>{"<"}</button>
+          <div className='foodSearchContainer'>
+            <div className='modalBackButtonContainer'>
+              <button onClick={() => {
+                setSearchedFoods([]);
+              }}>{"<"}</button>
+            </div>
 
-          {searchedFoods.map((foodItem, i) => {
-            return (
-              <div className='searchedFoodItem' key={i} onClick={() => selectAPIFoodItem(foodItem)}>
-                
-                <div className='left'>
-                  {foodItem.food.image
-                    ?<img src={foodItem.food.image} alt=""/>
-                    :<></>
-                  }
-                  <p>{foodItem.food.label}</p>
-                </div>
-                
-                <div className='right'>
-                  <p>{Math.round(foodItem.food.nutrients.ENERC_KCAL)} Cals</p>
-                </div>
+            <ul className='modalSearchResults'>
+              {searchedFoods.map((foodItem, i) => {
+                return (
+                  <li className='searchedFoodItem' key={i} onClick={() => selectAPIFoodItem(foodItem)}>
+                    
+                    <div className='left'>
+                      {foodItem.food.image
+                        ?<img src={foodItem.food.image} alt=""/>
+                        :<></>
+                      }
+                      <p>{foodItem.food.label}</p>
+                    </div>
+                    
+                    <div className='right'>
+                      <p>{Math.round(foodItem.food.nutrients.ENERC_KCAL)} Cals</p>
+                    </div>
 
-              </div>
-            )
-          })}
+                  </li>
+                )
+              })}
+            </ul>
+
+          </div>
         </div>
       )
     }
@@ -258,15 +272,21 @@ function App(props) {
     else if (foodSearchOptions.length > 0) {
       setModalFoodDisplay(
         <>
-          <input type="text" placeholder="Search for food" value={foodSearchInput} onChange={(e) => setFoodSearchInput(e.target.value)} />
-          <button onClick={() => setFoodSearchInput("")}>x</button>
-          <ul className='foodSuggestions' >
-            {foodSearchOptions.map((option, i) => {
-              return (
-                <li key={i} onClick={() => selectFoodItemSuggestion(option)}>{option}</li>
-              )
-            })}
-          </ul>
+          <div className='modalSearchInput'>
+            <input type="text" placeholder="Search for food" value={foodSearchInput} onChange={(e) => setFoodSearchInput(e.target.value)} />
+          </div>
+          <div className='foodSearchContainer'>
+            <div className='modalBackButtonContainer'>
+              <button onClick={() => setFoodSearchInput("")}>x</button>
+            </div>
+            <ul className='modalSearchResults'>
+              {foodSearchOptions.map((option, i) => {
+                return (
+                  <li key={i} onClick={() => selectFoodItemSuggestion(option)}>{option}</li>
+                )
+              })}
+            </ul>
+          </div>
         </>
       )
     }
@@ -274,7 +294,9 @@ function App(props) {
     else {
       setModalFoodDisplay(
         <>
-          <input type="text" placeholder="Search for food" value={foodSearchInput} onChange={(e) => setFoodSearchInput(e.target.value)} />
+          <div className='modalSearchInput'>
+            <input type="text" placeholder="Search for food" value={foodSearchInput} onChange={(e) => setFoodSearchInput(e.target.value)} />
+          </div>
           {displayExistingFoods(selectedMeal)}
         </>
       );
@@ -839,14 +861,22 @@ function App(props) {
           {foodLog
             ?
             <div className='allMeals'>
+
               <div className='mealOverview' onClick={() => openMealModal('breakfastModal')}>
                 <p>Breakfast</p>
                 <p>{calculateCalories('breakfast')} cals</p>
               </div>
               <dialog id='breakfastModal'>
-                <button onClick={() => closeMealModal('breakfastModal')}>X</button>
-                <h1>Breakfast</h1>
-                {modalFoodDisplay}
+                <div className='modalBackground'></div>
+                <div className='modalContent'>
+                  <div className='modalHeader'>
+                    <div className='closeModalButton'>
+                      <button onClick={() => closeMealModal('breakfastModal')}>X</button>
+                    </div>
+                    <h1>Breakfast</h1>
+                  </div>
+                  {modalFoodDisplay}
+                </div>
               </dialog>
 
               <div className='mealOverview' onClick={() => openMealModal('lunchModal')}>
@@ -854,9 +884,16 @@ function App(props) {
                 <p>{calculateCalories('lunch')} cals</p>
               </div>
               <dialog id='lunchModal'>
-                <button onClick={() => closeMealModal('lunchModal')}>X</button>
-                <h1>Lunch</h1>
-                {modalFoodDisplay}
+                <div className='modalBackground'></div>
+                <div className='modalContent'>
+                  <div className='modalHeader'>
+                    <div className='closeModalButton'>
+                      <button onClick={() => closeMealModal('lunchModal')}>X</button>
+                    </div>
+                    <h1>Lunch</h1>
+                  </div>
+                  {modalFoodDisplay}
+                </div>
               </dialog>
 
               <div className='mealOverview' onClick={() => openMealModal('dinnerModal')}>
@@ -864,9 +901,16 @@ function App(props) {
                 <p>{calculateCalories('dinner')} cals</p>
               </div>
               <dialog id='dinnerModal'>
-                <button onClick={() => closeMealModal('dinnerModal')}>X</button>
-                <h1>Dinner</h1>
-                {modalFoodDisplay}
+                <div className='modalBackground'></div>
+                <div className='modalContent'>
+                  <div className='modalHeader'>
+                    <div className='closeModalButton'>
+                      <button onClick={() => closeMealModal('dinnerModal')}>X</button>
+                    </div>
+                    <h1>Dinner</h1>
+                  </div>
+                  {modalFoodDisplay}
+                </div>
               </dialog>
 
               <div className='mealOverview' onClick={() => openMealModal('snackModal')}>
@@ -874,9 +918,16 @@ function App(props) {
                 <p>{calculateCalories('snack')} cals</p>
               </div>
               <dialog id='snackModal'>
-                <button onClick={() => closeMealModal('snackModal')}>X</button>
-                <h1>Snack</h1>
-                {modalFoodDisplay}
+                <div className='modalBackground'></div>
+                <div className='modalContent'>
+                  <div className='modalHeader'>
+                    <div className='closeModalButton'>
+                      <button onClick={() => closeMealModal('snackModal')}>X</button>
+                    </div>
+                    <h1>Snack</h1>
+                  </div>
+                  {modalFoodDisplay}
+                </div>
               </dialog>
 
               {generatePieChart()}        
