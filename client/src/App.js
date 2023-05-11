@@ -78,10 +78,10 @@ function App(props) {
 
     if (user) {
 
-      const dateParts = logDate.split('-');
-      const logYear = Number(dateParts[0]);
-      const logMonth = Number(dateParts[1] - 1);
-      const logDay = Number(dateParts[2]);
+      const inputDate = new Date(logDate);
+      const logYear = inputDate.getFullYear();
+      const logMonth = inputDate.getMonth();
+      const logDay = inputDate.getDate();
 
       // Check if user has a food log for this log date
       const dateExists = user.food_logs.filter(log => {
@@ -90,7 +90,7 @@ function App(props) {
         const year = converted.getFullYear();
         const month = converted.getMonth();
         const day = converted.getDate();
-
+        
         if (year === logYear && month === logMonth && day === logDay) {
           return log;
         }
@@ -112,7 +112,7 @@ function App(props) {
           mode: 'cors',
           body: JSON.stringify(
             {
-              date: Date.now()
+              date: new Date(logDate)
             }
           )
         })
@@ -480,6 +480,7 @@ function App(props) {
 
       if (data.success) {
         setFoodLog(data.updatedFoodLog);
+        setUser(data.updatedUser);
         setSelectedFoodItem();
         setFoodSearchOptions([]);
         setSearchedFoods([]);
@@ -524,11 +525,33 @@ function App(props) {
 
       if (data.success) {
         setFoodLog(data.updatedFoodLog);
+        setUser(data.updatedUser);
         setSelectedFoodItem();
         setFoodSearchOptions([]);
         setSearchedFoods([]);
         setNutritionFactsDisplay();
         setEditingFoodItem();
+      }
+    })
+    .catch(err => console.log(err))
+  }
+
+  // Deletes an existing food item
+  const deleteFoodItem = (meal, item) => {
+
+    fetch(`${props.serverURL}/logs/${foodLog._id}/${meal}/${item._id}/${item.foodId}`, {
+      method: 'DELETE',
+      headers: { 
+        "Content-Type": "application/json",
+        Authorization: cookie.token
+      },
+      mode: 'cors',
+    })
+    .then(res => res.json())
+    .then(data => {
+      if(data.success) {
+        setFoodLog(data.newFoodLog);
+        setUser(data.updatedUser);
       }
     })
     .catch(err => console.log(err))
@@ -571,26 +594,6 @@ function App(props) {
     }
 
     setLogDate(`${year}-${month}-${day}`);
-  }
-
-  // Deletes an existing food item
-  const deleteFoodItem = (meal, item) => {
-
-    fetch(`${props.serverURL}/logs/${foodLog._id}/${meal}/${item._id}/${item.foodId}`, {
-      method: 'DELETE',
-      headers: { 
-        "Content-Type": "application/json",
-        Authorization: cookie.token
-      },
-      mode: 'cors',
-    })
-    .then(res => res.json())
-    .then(data => {
-      if(data.success) {
-        setFoodLog(data.newFoodLog)
-      }
-    })
-    .catch(err => console.log(err))
   }
 
   // Edits daily calorie budget

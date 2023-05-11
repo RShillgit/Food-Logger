@@ -204,12 +204,20 @@ router.post('/logs/:logID',
         {new: true}
       )
       .then(updatedFoodLog => {
-        return res.status(200).json({success: true, auth: req.isAuthenticated(), updatedFoodLog: updatedFoodLog});
+
+        // Get the user
+        User.findById(req.user._id)
+        .populate('food_logs')
+        .then(updatedUser => {
+          return res.status(200).json({success: true, auth: req.isAuthenticated(), updatedFoodLog: updatedFoodLog, updatedUser: updatedUser});
+        })
+        .catch(err => {
+          return res.status(500).json({success: false, error: err, auth: req.isAuthenticated()});
+        })
       })
       .catch(err => {
         return res.status(500).json({success: false, error: err, auth: req.isAuthenticated()});
       })
-
     })
     .catch(err => {
       return res.status(500).json({success: false, error: err, auth: req.isAuthenticated()});
@@ -256,7 +264,16 @@ router.put('/logs/:logID',
         {new: true}
       )
       .then(updatedFoodLog => {     
-        return res.status(200).json({success: true, auth: req.isAuthenticated(), updatedFoodLog: updatedFoodLog});
+
+        // Get the user
+        User.findById(req.user._id)
+        .populate('food_logs')
+        .then(updatedUser => {
+          return res.status(200).json({success: true, auth: req.isAuthenticated(), updatedFoodLog: updatedFoodLog, updatedUser: updatedUser});
+        })
+        .catch(err => {
+          return res.status(500).json({success: false, error: err, auth: req.isAuthenticated()});
+        })
       })
       .catch(err => {
         return res.status(500).json({success: false, error: err, auth: req.isAuthenticated()});
@@ -301,8 +318,16 @@ router.delete('/logs/:logID/:meal/:uniqueID/:foodID',
         {new: true}  
       )
       .then(newFoodLog => {
-        return res.status(200).json({success: true, newFoodLog: newFoodLog, auth: req.isAuthenticated()});
 
+        //Get the user
+        User.findById(req.user._id)
+        .populate('food_logs')
+        .then(updatedUser => {
+          return res.status(200).json({success: true, newFoodLog: newFoodLog, updatedUser: updatedUser, auth: req.isAuthenticated()});
+        })
+        .catch(err => {
+          return res.status(500).json({success: false, error: err, auth: req.isAuthenticated()});
+        })
       })
       .catch(err => {
         return res.status(500).json({success: false, error: err, auth: req.isAuthenticated()});
