@@ -1,4 +1,5 @@
 import { useCookies } from 'react-cookie';
+import '../styles/navbar.css';
 
 const Navbar = (props) => {
 

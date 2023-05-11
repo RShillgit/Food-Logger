@@ -1,0 +1,25 @@
+.loginPage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.loginForm-container {
+    padding: 1rem;
+    border: 1px solid black;
+}
+.loginForm-title {
+    display: flex;
+    justify-content: center;
+}
+.loginForm-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+.login-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

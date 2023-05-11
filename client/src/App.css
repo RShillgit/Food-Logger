@@ -1,83 +1,44 @@
-/* Navbar */
-.navbar {
-    display: flex;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    width: -moz-available;          /* WebKit-based browsers will ignore this. */
-    width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
-    width: fill-available;
-    background-color: #fff;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
-    padding: 0 1rem 0 1rem;
-    height: 52px;
-    min-height: 52px;
-    max-height: 52px;
-    min-width: 234px;
-}
-
 /* ALL */
+html, body, #root, .App {
+    background-color: #121212;
+    margin: 0;
+    font-size: 18px;
+}
 .App {
     margin-top: 68px; /* 52px navbar height + 1rem */
 }
-
-/* Login Page */
-.loginPage {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-.loginForm-container {
-    padding: 1rem;
-    border: 1px solid black;
-}
-.loginForm-title {
-    display: flex;
-    justify-content: center;
-}
-.loginForm-container form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-}
-.login-buttons {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+html, body, #root, .App, input {
+    color: white;
 }
 
-/* Register Page */
-.registerPage {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+input {
+    font-size: 15px;
+    padding: 4px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 50%);
+    border: none;
+    color-scheme: dark;
 }
-.registerForm-container {
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid black;
+button {
+    font-size: 15px;
 }
-#registerForm {
+.formButtons {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     gap: 1rem;
+    padding: 1rem;
 }
-.registerForm-buttons {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-}
+
+/*
+    Charcoal #101820
+    background: #121212
+    dark gray: #212121
+    lghter gray: #323232
+    dark teal: #0D7377
+    neon teal: #14FFEC
+    neon green: #16FF00
+    bright yellow: #FEE715
+*/
 
 /* Main Page */
 .mainPage {
@@ -87,9 +48,71 @@
     align-items: center;
 }
 .mainPage-container {
-    border: 1px solid black;
-    padding: 1rem;
- }
+    border-radius: 1rem;
+    min-width: 66%;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 50%);
+    padding: 2rem;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+    /* Date navigation */
+    .date-navigation {
+        display: flex;
+        justify-content: center;
+        gap: 4px;
+    }
+    .date-navigation .dateInput {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        width: 212px;
+    }
+
+    /* Calorie budget */
+    .caloriesRemaining {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+    .caloriesRemaining h2 {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .caloriesSpan {
+        font-size: 34px;
+    }
+    .editCaloriesContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem 0 1rem 0;
+    }
+    #editCalorieBudget input {
+        font-size: 25px;
+        text-align: center;
+    }
+
+    /* Meal overviews */
+    .allMeals {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .mealOverview {
+        padding: 0 1rem 0 1rem;
+        border-radius: 1rem;
+        display: flex;
+        justify-content: space-between;
+        width: 50%;
+    }
+    .mealOverview:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 2px 8px rgb(0 0 0 / 50%);
+        cursor: pointer;
+        transform: scale(1.05);
+    }
+
 
 /* Existing Foods */
 .existingFoods {
@@ -161,11 +184,3 @@
     }
 
     /* Individual Food Item */
-
-rect {
-    display: flex;
-    flex-direction: column;
-}
-text {
-    font-size: large;
-}

@@ -13,14 +13,14 @@ const PieChart = (props) => {
             label: 'Grams',
             data: props.data,
             backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
+              'rgba(20, 255, 236, 0.4)',
+              'rgba(22, 255, 0, 0.4)',
+              'rgba(254, 231, 21, 0.4)',
             ],
             borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
+              'rgba(20, 255, 236)',
+              'rgba(22, 255, 0, 1)',
+              'rgba(254, 231, 21, 1)',
             ],
             borderWidth: 2,
           },
@@ -32,7 +32,9 @@ const PieChart = (props) => {
             <header className="title">
                 <p>Macronutrients</p>
             </header>
-            <Pie data={data} />
+            <div className='pieChart'>
+                <Pie data={data} />
+            </div>
         </div>
 
     )

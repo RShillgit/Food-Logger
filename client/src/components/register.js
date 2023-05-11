@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {useCookies} from 'react-cookie';
+import '../styles/register.css';
 
 const Register = (props) => {
 
@@ -24,54 +25,54 @@ const Register = (props) => {
         })()
     }, [cookie])
 
-        // Anytime the auth changes set the display
-        useEffect(() => {
+    // Anytime the auth changes set the display
+    useEffect(() => {
 
-            // TODO: Loading
-            if(auth === null) {
-    
-            }
-            // If the user is authorized navigate them to the home page
-            if (auth === true) {
-                navigate('/')
-            }
-            else {
-                setDisplay(
-                    <>
-                        <div className="registerPage-title">
-                            <h1>Food Logger</h1>
+        // TODO: Loading
+        if(auth === null) {
+
+        }
+        // If the user is authorized navigate them to the home page
+        if (auth === true) {
+            navigate('/')
+        }
+        else {
+            setDisplay(
+                <>
+                    <div className="registerPage-title">
+                        <h1>Food Logger</h1>
+                    </div>
+                    <div className="registerForm-container">
+
+                        <div className="registerForm-title">
+                            <h2>Sign Up</h2>
                         </div>
-                        <div className="registerForm-container">
 
-                            <div className="registerForm-title">
-                                <h2>Sign Up</h2>
+                        <form id="registerForm" onSubmit={registerForm}>
+                            <label>
+                                Username:
+                                <input id="register-username" name="register-username" type="text" required={true}/>
+                            </label>
+                            <label>
+                                Password:
+                                <input id="register-password" name="register-passowrd" type="password" required={true}/>
+                            </label>
+                            <label>
+                                Confirm Passowrd:
+                                <input id="register-confirmPassword" name="register-confirmPassowrd"type="password" required={true}/>
+                            </label>
+
+                            <div className="registerForm-buttons">
+                                <button id="registerButton" form="registerForm">Sign Up</button>
+                                <a href="/login">Already have an account?</a>
                             </div>
+                        </form>
+                    </div>
+                </>
+            )
+        }
 
-                            <form id="registerForm" onSubmit={registerForm}>
-                                <label>
-                                    Username:
-                                    <input id="register-username" name="register-username" type="text" required={true}/>
-                                </label>
-                                <label>
-                                    Password:
-                                    <input id="register-password" name="register-passowrd" type="password" required={true}/>
-                                </label>
-                                <label>
-                                    Confirm Passowrd:
-                                    <input id="register-confirmPassword" name="register-confirmPassowrd"type="password" required={true}/>
-                                </label>
-
-                                <div className="registerForm-buttons">
-                                    <button id="registerButton" form="registerForm">Sign Up</button>
-                                    <a href="/login">Already have an account?</a>
-                                </div>
-                            </form>
-                        </div>
-                    </>
-                )
-            }
-    
-        }, [auth])
+    }, [auth])
 
     // Handles Register Form Submit
     const registerForm = (e) => {

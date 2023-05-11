@@ -78,7 +78,7 @@ function App(props) {
   // On date change
   useEffect(() => {
 
-    if (user) {
+    if (user && logDate) {
 
       const inputDate = new Date(logDate);
       const logYear = inputDate.getFullYear();
@@ -128,26 +128,6 @@ function App(props) {
     }
 
   }, [logDate])
-
-  // TODO: On food log change
-  useEffect(() => {
-
-    // Either set a state variable to display, 
-    // OR
-    // Conditionally render it in the return statement,
-    // Because I think another state varaible will start messing a lot of things up
-
-    // If a food log exists render it
-    if(foodLog) {
-      
-    }
-
-    // Else render empty food log
-    else {
-      
-    }
-
-  }, [foodLog])
 
   // Anytime auth changes, set display
   useEffect(() => {
@@ -827,24 +807,26 @@ function App(props) {
         <div className='mainPage-container'>
 
           <div className='date-navigation'>
-            <button onClick={previousDay}>{"<"}</button>
-            <input type="date" value={logDate} onChange={(e) => setLogDate(e.target.value)}/>
-            <button onClick={nextDay}>{">"}</button>
+            <button className='date-nav-button' onClick={previousDay}>{"<"}</button>
+            <input className='dateInput' type="date" value={logDate} onChange={(e) => setLogDate(e.target.value)} required={true}/>
+            <button className='date-nav-button' onClick={nextDay}>{">"}</button>
           </div>
 
           <div className='caloriesRemaining'>
             {(calorieEditing)
               ?
-              <>
+              <div className='editCaloriesContainer'>
                 <form id='editCalorieBudget' onSubmit={editCalorieBudget}>
-                  <input type="number" value={dailyCalorieBudget} onChange={(e) => setDailyCalorieBudget(e.target.value)} min={1}/>
+                  <input type="number" value={dailyCalorieBudget} onChange={(e) => setDailyCalorieBudget(e.target.value)} min={1} required={true}/>
                 </form>
-                <button onClick={() => setCalorieEditing(false)}>Cancel</button>
-                <button form='editCalorieBudget' type='submit'>Edit</button>
-              </>
+                <div className='formButtons'>
+                  <button onClick={() => setCalorieEditing(false)}>Cancel</button>
+                  <button form='editCalorieBudget' type='submit'>Edit</button>
+                </div>
+              </div>
               :
               <>
-                <h2>Calories Remaining: {calculateCalories('remaining')}</h2>
+                <h2>Calories Remaining <span className='caloriesSpan'>{calculateCalories('remaining')}</span></h2>
                 <button onClick={() => {
                   setDailyCalorieBudget(calculateCalories('remaining'))
                   setCalorieEditing(true)
@@ -856,9 +838,10 @@ function App(props) {
 
           {foodLog
             ?
-            <>
+            <div className='allMeals'>
               <div className='mealOverview' onClick={() => openMealModal('breakfastModal')}>
-                <p>Breakfast {calculateCalories('breakfast')} cals</p>
+                <p>Breakfast</p>
+                <p>{calculateCalories('breakfast')} cals</p>
               </div>
               <dialog id='breakfastModal'>
                 <button onClick={() => closeMealModal('breakfastModal')}>X</button>
@@ -867,7 +850,8 @@ function App(props) {
               </dialog>
 
               <div className='mealOverview' onClick={() => openMealModal('lunchModal')}>
-                <p>Lunch {calculateCalories('lunch')} cals</p>
+                <p>Lunch</p>
+                <p>{calculateCalories('lunch')} cals</p>
               </div>
               <dialog id='lunchModal'>
                 <button onClick={() => closeMealModal('lunchModal')}>X</button>
@@ -876,7 +860,8 @@ function App(props) {
               </dialog>
 
               <div className='mealOverview' onClick={() => openMealModal('dinnerModal')}>
-                <p>Dinner {calculateCalories('dinner')} cals</p>
+                <p>Dinner</p>
+                <p>{calculateCalories('dinner')} cals</p>
               </div>
               <dialog id='dinnerModal'>
                 <button onClick={() => closeMealModal('dinnerModal')}>X</button>
@@ -885,7 +870,8 @@ function App(props) {
               </dialog>
 
               <div className='mealOverview' onClick={() => openMealModal('snackModal')}>
-                <p>Snack {calculateCalories('snack')} cals</p>
+                <p>Snack</p>
+                <p>{calculateCalories('snack')} cals</p>
               </div>
               <dialog id='snackModal'>
                 <button onClick={() => closeMealModal('snackModal')}>X</button>
@@ -894,7 +880,7 @@ function App(props) {
               </dialog>
 
               {generatePieChart()}        
-            </>
+            </div>
             :
             <h1>No Food Log</h1>
           }

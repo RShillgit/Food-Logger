@@ -1,3 +1,5 @@
+import '../styles/footer.css';
+
 const Footer = () => {
 
     // <script src="https://developer.edamam.com/attribution/badge.js"></script>

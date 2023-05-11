@@ -1,3 +1,5 @@
+import '../styles/notFound.css';
+
 const NotFound = (props) => {
     return (
         <div>
