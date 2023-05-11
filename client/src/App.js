@@ -505,35 +505,43 @@ function App(props) {
     .catch(err => console.log(err))
   }
 
-  // TODO: Go back a day
+  // Go back a day
   const previousDay = () => {
     
-    const dateSplit = logDate.split('-');
-    const day = dateSplit[2];
-    let newDay = Number(day) - 1;
+    let currentDate = new Date(logDate)
 
-    // Previous day === the last day of the previous month
-    if (newDay === 0) {
-      console.log('Format date to last day of previous month');
+    let year = currentDate.getFullYear();
+    let month = currentDate.getMonth() + 1;
+    let day = currentDate.getDate();
+
+    if (month < 10) {
+      month = `0${month}`;
     }
-    else if (newDay < 10) {
-      newDay = `0${newDay}`;
+    if (day < 10) {
+      day = `0${day}`;
     }
-    setLogDate(`${dateSplit[0]}-${dateSplit[1]}-${newDay}`)
+
+    setLogDate(`${year}-${month}-${day}`);
   }
 
-  // TODO: Go forward a day
+  // Go forward a day
   const nextDay = () => {
-    const dateSplit = logDate.split('-');
-    const day = dateSplit[2];
-    let newDay = Number(day) + 1;
 
-    // If next day === the first day of the next month
+    let currentDate = new Date(logDate)
+    currentDate.setDate(currentDate.getDate() + 2);
 
-    if (newDay < 10) {
-      newDay = `0${newDay}`;
+    let year = currentDate.getFullYear();
+    let month = currentDate.getMonth() + 1;
+    let day = currentDate.getDate();
+
+    if (month < 10) {
+      month = `0${month}`;
     }
-    setLogDate(`${dateSplit[0]}-${dateSplit[1]}-${newDay}`)
+    if (day < 10) {
+      day = `0${day}`;
+    }
+
+    setLogDate(`${year}-${month}-${day}`);
   }
 
   // Deletes an existing food item
