@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from './components/navbar';
 import NutritionFacts from './components/nutritionFacts';
 import { v4 as uuidv4 } from 'uuid'
+import PieChart from './components/pieChart';
 
 function App(props) {
 
@@ -299,7 +300,7 @@ function App(props) {
       );
     }
 
-  }, [foodSearchOptions, searchedFoods, selectedFoodItem, nutritionFactsDisplay, editingFoodItem, selectedMeal, foodSearchInput])
+  }, [user, foodSearchOptions, searchedFoods, selectedFoodItem, nutritionFactsDisplay, editingFoodItem, selectedMeal, foodSearchInput])
 
   // Food search input change
   useEffect(() => {
@@ -783,6 +784,41 @@ function App(props) {
     }
   }
 
+  // calculates macronutrient information for the pie chart
+  const generatePieChart = () => {
+
+    // Proteins
+    const proteinsPerMeal = [
+      foodLog.breakfast.reduce((acc, obj) => acc + obj.total_proteins, 0),
+      foodLog.lunch.reduce((acc, obj) => acc + obj.total_proteins, 0),
+      foodLog.dinner.reduce((acc, obj) => acc + obj.total_proteins, 0),
+      foodLog.snack.reduce((acc, obj) => acc + obj.total_proteins, 0)
+    ]
+    const totalProteins = proteinsPerMeal.reduce((acc, current) => acc + current, 0);
+
+    // Fats
+    const fatsPerMeal = [
+      foodLog.breakfast.reduce((acc, obj) => acc + obj.total_fats, 0),
+      foodLog.lunch.reduce((acc, obj) => acc + obj.total_fats, 0),
+      foodLog.dinner.reduce((acc, obj) => acc + obj.total_fats, 0),
+      foodLog.snack.reduce((acc, obj) => acc + obj.total_fats, 0)
+    ]
+    const totalFats = fatsPerMeal.reduce((acc, current) => acc + current, 0);
+
+    // Carbs
+    const carbsPerMeal = [
+      foodLog.breakfast.reduce((acc, obj) => acc + obj.total_carbs, 0),
+      foodLog.lunch.reduce((acc, obj) => acc + obj.total_carbs, 0),
+      foodLog.dinner.reduce((acc, obj) => acc + obj.total_carbs, 0),
+      foodLog.snack.reduce((acc, obj) => acc + obj.total_carbs, 0)
+    ]
+    const totalCarbs = carbsPerMeal.reduce((acc, current) => acc + current, 0);
+
+    const data = [totalProteins, totalCarbs, totalFats]
+
+    return (<PieChart data={data}/>)
+  }
+
   return (
     <div className="App mainPage">
       <Navbar serverURL={props.serverURL}/>
@@ -857,11 +893,7 @@ function App(props) {
                 {modalFoodDisplay}
               </dialog>
 
-              <div className='macroNutrient-stats'>
-                <p>Carbs {carbCount}g</p>
-                <p>Fat {fatCount}g</p>
-                <p>Protein {proteinCount}g</p>
-              </div>           
+              {generatePieChart()}        
             </>
             :
             <h1>No Food Log</h1>
@@ -870,6 +902,7 @@ function App(props) {
         </div>
         :<></>
       }
+
     </div>
   );
 }

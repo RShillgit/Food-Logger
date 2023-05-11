@@ -161,3 +161,11 @@
     }
 
     /* Individual Food Item */
+
+rect {
+    display: flex;
+    flex-direction: column;
+}
+text {
+    font-size: large;
+}
