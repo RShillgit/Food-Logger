@@ -32,6 +32,7 @@ function App(props) {
   const [proteinCount, setProteinCount] = useState(0);
 
   /* Food Search & Display */
+  const [foodSearchInput, setFoodSearchInput] = useState('');
   const [selectedMeal, setSelectedMeal] = useState('');
   const [modalFoodDisplay, setModalFoodDisplay] = useState();
   const [foodSearchOptions, setFoodSearchOptions] = useState([]);
@@ -214,6 +215,7 @@ function App(props) {
         <div className='individualFoodItem'>
 
           <button onClick={() => {
+            setFoodSearchInput("");
             setSelectedFoodItem();
             setNutritionFactsDisplay();
           }}>{"<"}</button>
@@ -243,7 +245,12 @@ function App(props) {
     else if (searchedFoods.length > 0) {
       setModalFoodDisplay(
         <div className='searchedFoodItems'>
-            {searchedFoods.map((foodItem, i) => {
+
+          <button onClick={() => {
+            setSearchedFoods([]);
+          }}>{"<"}</button>
+
+          {searchedFoods.map((foodItem, i) => {
             return (
               <div className='searchedFoodItem' key={i} onClick={() => selectAPIFoodItem(foodItem)}>
                 
@@ -270,6 +277,8 @@ function App(props) {
     else if (foodSearchOptions.length > 0) {
       setModalFoodDisplay(
         <>
+          <input type="text" placeholder="Search for food" value={foodSearchInput} onChange={(e) => setFoodSearchInput(e.target.value)} />
+          <button onClick={() => setFoodSearchInput("")}>x</button>
           <ul className='foodSuggestions' >
             {foodSearchOptions.map((option, i) => {
               return (
@@ -282,10 +291,33 @@ function App(props) {
     }
 
     else {
-      setModalFoodDisplay();
+      setModalFoodDisplay(
+        <>
+          <input type="text" placeholder="Search for food" value={foodSearchInput} onChange={(e) => setFoodSearchInput(e.target.value)} />
+          {displayExistingFoods(selectedMeal)}
+        </>
+      );
     }
 
-  }, [foodSearchOptions, searchedFoods, selectedFoodItem, nutritionFactsDisplay, editingFoodItem])
+  }, [foodSearchOptions, searchedFoods, selectedFoodItem, nutritionFactsDisplay, editingFoodItem, selectedMeal, foodSearchInput])
+
+  // Food search input change
+  useEffect(() => {
+
+    // Autocomplete food search
+    if(foodSearchInput.length > 0) {
+      fetch(`https://api.edamam.com/auto-complete?app_id=${process.env.REACT_APP_API_ID}&app_key=${process.env.REACT_APP_API_KEY}&q=${foodSearchInput}`)
+      .then(res => res.json())
+      .then(data => {
+        setFoodSearchOptions(data);
+      })
+      .catch(err => console.log(err))
+    }
+    else {
+      setFoodSearchOptions([]);
+    }
+
+  }, [foodSearchInput])
 
   // Calculates calories for calories remaining and each meal
   const calculateCalories = (identifier) => {
@@ -334,6 +366,7 @@ function App(props) {
   // Closes Meal Assocaited Modal
   const closeMealModal = (modalID) => {
 
+    setFoodSearchInput("")
     setFoodSearchOptions([]);
     setSearchedFoods([]);
     setSelectedFoodItem();
@@ -344,25 +377,12 @@ function App(props) {
     selectedModal.close();
   }
 
-  // Autocomplete for food search
-  const foodSearchAutocomplete = (e) => {
-    fetch(`https://api.edamam.com/auto-complete?app_id=${process.env.REACT_APP_API_ID}&app_key=${process.env.REACT_APP_API_KEY}&q=${e.target.value}`)
-    .then(res => res.json())
-    .then(data => {
-      setFoodSearchOptions(data);
-    })
-    .catch(err => console.log(err))
-  }
-
   // Selects food item suggestion
   const selectFoodItemSuggestion = (foodItemSuggestion) => {
 
     fetch(`https://api.edamam.com/api/food-database/v2/parser?app_id=${process.env.REACT_APP_API_ID}&app_key=${process.env.REACT_APP_API_KEY}&ingr=${foodItemSuggestion}&nutrition-type=cooking`)
     .then(res => res.json())
     .then(data => {
-
-      // Set food search items to empty array
-      setFoodSearchOptions([]);
 
       // Set searched foods
       if (data.hints.length > 0) {
@@ -481,6 +501,7 @@ function App(props) {
       if (data.success) {
         setFoodLog(data.updatedFoodLog);
         setUser(data.updatedUser);
+        setFoodSearchInput("");
         setSelectedFoodItem();
         setFoodSearchOptions([]);
         setSearchedFoods([]);
@@ -806,8 +827,6 @@ function App(props) {
               <dialog id='breakfastModal'>
                 <button onClick={() => closeMealModal('breakfastModal')}>X</button>
                 <h1>Breakfast</h1>
-                <input type="text" placeholder="Search a food" onChange={foodSearchAutocomplete} />
-                {displayExistingFoods('breakfast')}
                 {modalFoodDisplay}
               </dialog>
 
@@ -817,8 +836,6 @@ function App(props) {
               <dialog id='lunchModal'>
                 <button onClick={() => closeMealModal('lunchModal')}>X</button>
                 <h1>Lunch</h1>
-                <input type="text" placeholder="Search a food" onChange={foodSearchAutocomplete} />
-                {displayExistingFoods('lunch')}
                 {modalFoodDisplay}
               </dialog>
 
@@ -828,8 +845,6 @@ function App(props) {
               <dialog id='dinnerModal'>
                 <button onClick={() => closeMealModal('dinnerModal')}>X</button>
                 <h1>Dinner</h1>
-                <input type="text" placeholder="Search a food" onChange={foodSearchAutocomplete} />
-                {displayExistingFoods('dinner')}
                 {modalFoodDisplay}
               </dialog>
 
@@ -839,8 +854,6 @@ function App(props) {
               <dialog id='snackModal'>
                 <button onClick={() => closeMealModal('snackModal')}>X</button>
                 <h1>Snack</h1>
-                <input type="text" placeholder="Search a food" onChange={foodSearchAutocomplete} />
-                {displayExistingFoods('snack')}
                 {modalFoodDisplay}
               </dialog>
 
