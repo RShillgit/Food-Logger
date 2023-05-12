@@ -7,7 +7,7 @@ import './App.css';
 
 const RouteSwitch = () => {
 
-    const serverURL = 'http://localhost:8000';
+    const serverURL = 'https://woozy-carpenter-production-7d1c.up.railway.app'; // http://localhost:8000
 
     const validateUser = (token) => {
         return fetch(serverURL, {
