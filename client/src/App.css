@@ -102,6 +102,7 @@ button {
     }
     .caloriesSpan {
         font-size: 34px;
+        color: #14FFEC;
     }
     .editCaloriesContainer {
         display: flex;
@@ -119,6 +120,7 @@ button {
         display: flex;
         flex-direction: column;
         align-items: center;
+        gap: 8px;
     }
     .mealOverview {
         padding: 0 1rem 0 1rem;
@@ -126,6 +128,7 @@ button {
         display: flex;
         justify-content: space-between;
         width: 50%;
+        border: 2px solid white;
     }
     .mealOverview:hover {
         background-color: rgba(255, 255, 255, 0.2);
@@ -222,6 +225,15 @@ button {
         align-items: center;
         gap: 8px;
         width: 100%;
+    }
+    .individualExistingFood .editClickable .existingFoodStats {
+        display: flex;
+        flex-direction: column;
+    }
+    .individualExistingFood .editClickable .existingFoodStats .serving-stats {
+        display: flex;
+        justify-content: flex-end;
+        font-size: 15px;
     }
     .individualExistingFood .left {
         display: flex;

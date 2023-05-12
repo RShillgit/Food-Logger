@@ -679,6 +679,7 @@ function App(props) {
             ?
             <>
               {foodLog.breakfast.map(food => {
+                console.log(food)
                 return (
                   <div className='individualExistingFood' key={uuidv4()}>
 
@@ -690,7 +691,10 @@ function App(props) {
                         }
                         <p>{food.label}</p>
                       </div>
-                      <span>{food.total_calories} cals</span>
+                      <div className='existingFoodStats'>
+                        <span>{food.total_calories} cals</span>
+                        <span className='serving-stats'>{food.serving_number} {food.serving_units}</span>
+                      </div>
                     </div>
 
                     <div className='right'>
@@ -890,78 +894,78 @@ function App(props) {
 
           {foodLog
             ?
-            <div className='allMeals'>
-
-              <div className='mealOverview' onClick={() => openMealModal('breakfastModal')}>
-                <p>Breakfast</p>
-                <p>{calculateCalories('breakfast')} cals</p>
-              </div>
-              <dialog id='breakfastModal'>
-                <div className='modalBackground'></div>
-                <div className='modalContent'>
-                  <div className='modalHeader'>
-                    <div className='closeModalButton'>
-                      <button onClick={() => closeMealModal('breakfastModal')}>X</button>
-                    </div>
-                    <h1>Breakfast</h1>
-                  </div>
-                  {modalFoodDisplay}
+            <>
+              <div className='allMeals'>
+                <div className='mealOverview' onClick={() => openMealModal('breakfastModal')}>
+                  <p>Breakfast</p>
+                  <p><strong>{calculateCalories('breakfast')}</strong> cals</p>
                 </div>
-              </dialog>
-
-              <div className='mealOverview' onClick={() => openMealModal('lunchModal')}>
-                <p>Lunch</p>
-                <p>{calculateCalories('lunch')} cals</p>
-              </div>
-              <dialog id='lunchModal'>
-                <div className='modalBackground'></div>
-                <div className='modalContent'>
-                  <div className='modalHeader'>
-                    <div className='closeModalButton'>
-                      <button onClick={() => closeMealModal('lunchModal')}>X</button>
+                <dialog id='breakfastModal'>
+                  <div className='modalBackground'></div>
+                  <div className='modalContent'>
+                    <div className='modalHeader'>
+                      <div className='closeModalButton'>
+                        <button onClick={() => closeMealModal('breakfastModal')}>X</button>
+                      </div>
+                      <h1>Breakfast</h1>
                     </div>
-                    <h1>Lunch</h1>
+                    {modalFoodDisplay}
                   </div>
-                  {modalFoodDisplay}
-                </div>
-              </dialog>
+                </dialog>
 
-              <div className='mealOverview' onClick={() => openMealModal('dinnerModal')}>
-                <p>Dinner</p>
-                <p>{calculateCalories('dinner')} cals</p>
-              </div>
-              <dialog id='dinnerModal'>
-                <div className='modalBackground'></div>
-                <div className='modalContent'>
-                  <div className='modalHeader'>
-                    <div className='closeModalButton'>
-                      <button onClick={() => closeMealModal('dinnerModal')}>X</button>
+                <div className='mealOverview' onClick={() => openMealModal('lunchModal')}>
+                  <p>Lunch</p>
+                  <p><strong>{calculateCalories('lunch')}</strong> cals</p>
+                </div>
+                <dialog id='lunchModal'>
+                  <div className='modalBackground'></div>
+                  <div className='modalContent'>
+                    <div className='modalHeader'>
+                      <div className='closeModalButton'>
+                        <button onClick={() => closeMealModal('lunchModal')}>X</button>
+                      </div>
+                      <h1>Lunch</h1>
                     </div>
-                    <h1>Dinner</h1>
+                    {modalFoodDisplay}
                   </div>
-                  {modalFoodDisplay}
-                </div>
-              </dialog>
+                </dialog>
 
-              <div className='mealOverview' onClick={() => openMealModal('snackModal')}>
-                <p>Snack</p>
-                <p>{calculateCalories('snack')} cals</p>
-              </div>
-              <dialog id='snackModal'>
-                <div className='modalBackground'></div>
-                <div className='modalContent'>
-                  <div className='modalHeader'>
-                    <div className='closeModalButton'>
-                      <button onClick={() => closeMealModal('snackModal')}>X</button>
+                <div className='mealOverview' onClick={() => openMealModal('dinnerModal')}>
+                  <p>Dinner</p>
+                  <p><strong>{calculateCalories('dinner')}</strong> cals</p>
+                </div>
+                <dialog id='dinnerModal'>
+                  <div className='modalBackground'></div>
+                  <div className='modalContent'>
+                    <div className='modalHeader'>
+                      <div className='closeModalButton'>
+                        <button onClick={() => closeMealModal('dinnerModal')}>X</button>
+                      </div>
+                      <h1>Dinner</h1>
                     </div>
-                    <h1>Snack</h1>
+                    {modalFoodDisplay}
                   </div>
-                  {modalFoodDisplay}
-                </div>
-              </dialog>
+                </dialog>
 
-              {generatePieChart()}        
-            </div>
+                <div className='mealOverview' onClick={() => openMealModal('snackModal')}>
+                  <p>Snack</p>
+                  <p><strong>{calculateCalories('snack')}</strong> cals</p>
+                </div>
+                <dialog id='snackModal'>
+                  <div className='modalBackground'></div>
+                  <div className='modalContent'>
+                    <div className='modalHeader'>
+                      <div className='closeModalButton'>
+                        <button onClick={() => closeMealModal('snackModal')}>X</button>
+                      </div>
+                      <h1>Snack</h1>
+                    </div>
+                    {modalFoodDisplay}
+                  </div>
+                </dialog>       
+              </div>
+              {generatePieChart()}
+            </>
             :
             <h1>No Food Log</h1>
           }
