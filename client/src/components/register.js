@@ -25,6 +25,15 @@ const Register = (props) => {
         })()
     }, [cookie])
 
+    // Anytime the error message changes set the display
+    useEffect(() => {
+
+        if(errorMessage) {
+            setDisplay(registerDisplay)
+        }
+
+    }, [errorMessage])
+
     // Anytime the auth changes set the display
     useEffect(() => {
 
@@ -37,39 +46,7 @@ const Register = (props) => {
             navigate('/')
         }
         else {
-            setDisplay(
-                <>
-                    <div className="registerPage-title">
-                        <h1>Food Logger</h1>
-                    </div>
-                    <div className="registerForm-container">
-
-                        <div className="registerForm-title">
-                            <h2>Sign Up</h2>
-                        </div>
-
-                        <form id="registerForm" onSubmit={registerForm}>
-                            <label>
-                                Username:
-                                <input id="register-username" name="register-username" type="text" required={true}/>
-                            </label>
-                            <label>
-                                Password:
-                                <input id="register-password" name="register-passowrd" type="password" required={true}/>
-                            </label>
-                            <label>
-                                Confirm Passowrd:
-                                <input id="register-confirmPassword" name="register-confirmPassowrd"type="password" required={true}/>
-                            </label>
-
-                            <div className="registerForm-buttons">
-                                <button id="registerButton" form="registerForm">Sign Up</button>
-                                <a href="/login">Already have an account?</a>
-                            </div>
-                        </form>
-                    </div>
-                </>
-            )
+            setDisplay(registerDisplay)
         }
 
     }, [auth])
@@ -106,12 +83,16 @@ const Register = (props) => {
 
                 // Username Already Exists
                 if (data.success === false) {
-                    setErrorMessage(data.message);
+                    setErrorMessage(
+                        <div className="errorMessage">
+                            <p>{data.message}</p>
+                        </div>
+                    )
                 }
 
                 // If it was successful, redirect to login
                 else if (data.success) {
-                    navigate('/login', {state: {registeredMessage: 'Account Registered Successfully'}});
+                    navigate('/login', {state: {registeredMessage: 'Account Registered Successfully!'}});
                 }
             })
         }
@@ -122,10 +103,35 @@ const Register = (props) => {
         }
     }
 
+    const registerDisplay = (
+        <>
+            <div className="registerForm-container">
+
+                <div className="registerForm-title">
+                    <h1>Food Logger</h1>
+                </div>
+
+                {errorMessage}
+
+                <form id="registerForm" onSubmit={registerForm}>
+                                            
+                    <input id="register-username" name="register-username" type="text" placeholder="Username" required={true}/>                         
+                    <input id="register-password" name="register-passowrd" type="password" placeholder="Password" required={true}/>                         
+                    <input id="register-confirmPassword" name="register-confirmPassowrd"type="password" placeholder="Confirm Password" required={true}/>
+            
+                    <div className="registerForm-buttons">
+                        <button id="registerButton" form="registerForm">Sign Up</button>
+                        <a href="/login">Already have an account?</a>
+                    </div>
+
+                </form>
+            </div>
+        </>
+    )
+
     return (
         <div className="registerPage">
             {display}
-            {errorMessage}
         </div>
     )
 }

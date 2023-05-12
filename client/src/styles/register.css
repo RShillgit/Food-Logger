@@ -5,12 +5,22 @@
     justify-content: center;
 }
 .registerForm-container {
-    padding: 1rem;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border: 1px solid black;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 50%);
+    border-radius: 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.registerForm-title h1 {
+    margin-top: 0;
+    margin-bottom: 2rem;
 }
 #registerForm {
     display: flex;
@@ -18,10 +28,49 @@
     align-items: center;
     gap: 1rem;
 }
+.errorMessage {
+    background-color: #9c2b2e;
+    color: white;
+    border-radius: 8px;
+    border: 1px solid #e84e4f;
+    padding: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 50%);
+}
+.errorMessage p {
+    margin: 0;
+}
 .registerForm-buttons {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 8px;
+}
+#registerButton {
+    font-size: 20px;
+    background-color: rgba(20, 255, 236, 0.8);
+    border: none;
+    padding: 8px;
+    border-radius: 8px;
+    width: 120px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 50%);
+}
+#registerButton:hover {
+    cursor: pointer;
+    background-color: rgba(20, 255, 236, 1);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 100%);
+    transform: scale(1.05);
+}
+.registerForm-buttons a {
+    color: rgba(22, 255, 0, 0.8);
+    text-decoration: none;
+}
+.registerForm-buttons a:hover {
+    color: #16FF00;
+    text-decoration: underline;
+}
+.registerForm-buttons a:visited {
+    color: rgba(22, 255, 0, 0.8);
+    text-decoration: none;
 }

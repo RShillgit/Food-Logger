@@ -40,7 +40,7 @@ router.post('/register', (req, res) => {
 
     // Username already exists
     if (user) {
-      return res.status(500).json({success: false, message:'Username already exists'});
+      return res.status(500).json({success: false, message:'Username already exists!'});
     }
 
     const saltHash = genPassword(req.body.password);
@@ -78,7 +78,7 @@ router.post('/login', (req, res) => {
 
       // If no user send error
       if (!user) {
-        return res.status(500).json({success: false, error_message: "User not found."});
+        return res.status(500).json({success: false, error_message: "User not found!"});
       }
 
       // Check if password is valid
@@ -93,7 +93,7 @@ router.post('/login', (req, res) => {
       } 
       // If password is invalid send error message
       else {
-        return res.status(500).json({success: false, error_message: "The password you entered is incorrect."})
+        return res.status(500).json({success: false, error_message: "Incorrect username/password combination!"})
       }
     })
 })

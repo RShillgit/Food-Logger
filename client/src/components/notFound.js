@@ -1,9 +1,16 @@
+import { useNavigate } from 'react-router-dom';
 import '../styles/notFound.css';
 
 const NotFound = (props) => {
+
+    const navigate = useNavigate();
+
     return (
-        <div>
-            <h1>404 Not Found</h1>
+        <div className='notFoundPage'>
+            <div className='notFoundContainer'>
+                <h1>Page Not Found</h1>
+                <button onClick={() => navigate('/')}>Return Home</button>
+            </div>
         </div>
     )
 }

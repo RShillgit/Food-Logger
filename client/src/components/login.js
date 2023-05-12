@@ -33,6 +33,15 @@ const Login = (props) => {
         })()
     }, [cookie])
 
+    // Anytime the error message changes set the display
+    useEffect(() => {
+
+        if(errorMessage) {
+            setDisplay(loginDisplay)
+        }
+
+    }, [errorMessage])
+
     // Anytime the auth changes set the display
     useEffect(() => {
 
@@ -53,33 +62,7 @@ const Login = (props) => {
                     </div>
                 );
             }
-            setDisplay(
-                <>
-                    <div className="loginPage-title">
-                        <h1>Food Logger</h1>
-                    </div>
-                    <div className="loginForm-container">
-
-                        <div className="loginForm-title">
-                            <h2>Log In</h2>
-                        </div>
-
-                        {registeredSuccessfullyMessage}
-
-                        <form id="loginForm" onSubmit={loginFormSubmit}>
-                            <input type="text" name="username" id="usernameInput" placeholder="Username" required={true}/>
-                            <input type="password" name="password" id="passwordInput" placeholder="Password" required={true}/>                       
-                            <button id="loginButton">Log In</button>
-                        </form>
-
-                        <div className="login-buttons">
-                            <button id="guestLoginButton" onClick={guestLogin}>Log In As A Guest</button>
-                            <p>·</p>
-                            <a id="registerLink" href='/register'> Sign Up</a>                          
-                        </div>
-                    </div>
-                </>
-            )
+            setDisplay(loginDisplay)
         }
 
     }, [auth])
@@ -157,10 +140,35 @@ const Login = (props) => {
         })
     }
 
+    const loginDisplay = (
+        <>
+            <div className="loginForm-container">
+
+                <div className="loginForm-title">
+                    <h1>Food Logger</h1>
+                </div>
+
+                {registeredSuccessfullyMessage}
+                {errorMessage}
+
+                <form id="loginForm" onSubmit={loginFormSubmit}>
+                    <input type="text" name="username" id="usernameInput" placeholder="Username" required={true}/>
+                    <input type="password" name="password" id="passwordInput" placeholder="Password" required={true}/>                       
+                    <button id="loginButton">Log In</button>
+                </form>
+
+                <div className="login-buttons">
+                    <button id="guestLoginButton" onClick={guestLogin}>Log In As A Guest</button>
+                    <p>·</p>
+                    <a id="registerLink" href='/register'> Sign Up</a>                          
+                </div>
+            </div>
+        </>
+    )
+
     return (
         <div className="loginPage">
             {display}
-            {errorMessage}
         </div>
     )
 }

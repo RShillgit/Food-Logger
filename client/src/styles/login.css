@@ -5,21 +5,103 @@
     flex-direction: column;
 }
 .loginForm-container {
-    padding: 1rem;
-    border: 1px solid black;
-}
-.loginForm-title {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 2rem;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 50%);
+    border-radius: 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
 }
-.loginForm-container form {
+.loginForm-title h1 {
+    margin-top: 0;
+    margin-bottom: 2rem;
+}
+#loginForm {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
 }
+.registeredSuccessfully {
+    background-color: rgba(22, 255, 0, 0.8);
+    border: 1px solid rgba(22, 255, 0, 0.6);
+    color: black;
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 50%);
+}
+.registeredSuccessfully p {
+    margin: 0;
+}
+.errorMessage {
+    background-color: #9c2b2e;
+    color: white;
+    border-radius: 8px;
+    border: 1px solid #e84e4f;
+    padding: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 50%);
+}
+.errorMessage p {
+    margin: 0;
+}
+#loginButton {
+    font-size: 20px;
+    background-color: rgba(20, 255, 236, 0.8);
+    border: none;
+    padding: 8px;
+    border-radius: 8px;
+    width: 120px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 50%);
+}
+#loginButton:hover {
+    cursor: pointer;
+    background-color: rgba(20, 255, 236, 1);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 100%);
+    transform: scale(1.05);
+}
+
+#guestLoginButton {
+    font-size: 18px;
+    background-color: rgba(254, 231, 21, 0.8);
+    border: none;
+    padding: 8px;
+    border-radius: 8px;
+    width: max-content;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 50%);
+}
+#guestLoginButton:hover {
+    cursor: pointer;
+    background-color:  rgba(254, 231, 21, 1);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 100%);
+    transform: scale(1.05);
+}
+
 .login-buttons {
+    margin-top: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 4px;
 }
+.login-buttons a {
+    color: rgba(22, 255, 0, 0.8);
+    text-decoration: none;
+}
+.login-buttons a:hover {
+    color: #16FF00;
+    text-decoration: underline;
+}
+.login-buttons a:visited {
+    color: rgba(22, 255, 0, 0.8);
+    text-decoration: none;
+}
+
+
