@@ -1,4 +1,11 @@
 /* ALL */
+@font-face {
+    font-family: Signika;
+    src: url('./fonts/Signika_Negative/SignikaNegative-VariableFont_wght.ttf');
+}
+html, body, #root, .App, button, input, dialog {
+    font-family: Signika;
+}
 html, body, #root, .App {
     background-color: #121212;
     margin: 0;
@@ -164,6 +171,7 @@ button {
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        margin-bottom: 1rem;
     }
     .modalHeader h1 {
         margin: 0;
@@ -199,6 +207,14 @@ button {
         display: flex;
         justify-content: space-between;
         gap: 2rem;
+        border-radius: 1rem;
+        padding: 8px;
+    }
+    .individualExistingFood:hover {
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 2px 8px rgb(0 0 0 / 80%);
+        transform: scale(1.05);
     }
     .individualExistingFood .left {
         display: flex;
@@ -206,14 +222,27 @@ button {
     }
     .individualExistingFood .left img {
         width: 50px;
+        border-radius: 8px;
     }
     .individualExistingFood .right {
         display: flex;
-        align-items: center;
         gap: 8px;
     }
+    .individualExistingFood .right button {
+        background-color: rgba(255, 0, 0, 0.8);;
+        border: none;
+        border-radius: 8px;
+    }
+    .individualExistingFood .right button:hover {
+        cursor: pointer;
+        background-color: rgba(255, 0, 0, 1);
+        box-shadow: 0 2px 8px rgb(0 0 0 / 100%);
+        transform: scale(1.05);
+    }
     .modalBackButtonContainer {
-        margin-bottom: 8px;
+        margin-top: 1rem;
+        position: absolute;
+        top: 0;
     }
 
     /* Search results */
@@ -232,8 +261,7 @@ button {
     .modalSearchResults li:hover {
         cursor: pointer;
         background-color: rgba(255, 255, 255, 0.1);
-        box-shadow: 0 2px 8px rgb(0 0 0 / 50%);
-        cursor: pointer;
+        box-shadow: 0 2px 8px rgb(0 0 0 / 80%);
         transform: scale(1.05);
     }
     .searchedFoodItems {
@@ -265,18 +293,17 @@ button {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        justify-content: center;
         gap: 1rem;
-        min-height: 200px;
-    }
-    .individualFoodItem .main .modalBackButtonContainer {
-        margin-bottom: 0;
-        margin-top: 1rem;
+        min-height: 300px;
     }
     .individualFoodItem .main header {
         display: flex;
         justify-content: center;
+        text-align: center;
         background-color: rgba(0, 0, 0, 0.5);
         width: 100%;
+        border-radius: 8px;
     }
     .individualFoodItem .main .imageContainer {
         position: absolute;
@@ -285,7 +312,7 @@ button {
         display: flex;
         overflow: hidden;
         left: 0;
-        height: calc(50vh - 130px);
+        height: 300px;
     }
     .individualFoodItem .main img {
         object-fit: cover;
@@ -298,5 +325,20 @@ button {
         gap: 8px;
         flex-wrap: wrap;
         width: 100%;
-        margin-bottom: 1rem;
+        padding: 1rem 0 1rem 0;
+    }
+    .unitButtons button {
+        background-color: rgba(0, 0, 0, 0.5);
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-size: 20px;
+        min-width: 100px;
+        padding: 8px;
+    }
+    .unitButtons button:hover {
+        cursor: pointer;
+        background-color: rgba(0, 0, 0, 0.8);
+        box-shadow: 0 2px 8px rgb(0 0 0 / 80%);
+        transform: scaleY(1.05);
     }

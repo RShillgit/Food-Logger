@@ -293,7 +293,7 @@ function App(props) {
           </div>
           <div className='foodSearchContainer'>
             <div className='modalBackButtonContainer'>
-              <button onClick={() => setFoodSearchInput("")}>x</button>
+              <button onClick={() => setFoodSearchInput("")}>{"<"}</button>
             </div>
             <ul className='modalSearchResults'>
               {foodSearchOptions.map((option, i) => {
@@ -690,7 +690,7 @@ function App(props) {
                     </div>
                     <div className='right'>
                       <p>{food.total_calories} cals</p>
-                      <button onClick={() => deleteFoodItem(meal, food)}>X</button>
+                      <button onClick={() => deleteFoodItem(meal, food)}>Delete</button>
                     </div>
                   </div>
                 )

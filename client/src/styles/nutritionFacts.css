@@ -11,9 +11,24 @@
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid black;
+    padding-bottom: 4px;
 }
 .nutritionFacts .title h1 {
     margin: 0;
+}
+.nutritionFacts .title button {
+    border: none;
+    border-radius: 8px;
+    padding: 8px;
+    font-size: 20px;
+    background-color: rgba(20, 255, 236, 0.8);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 40%);
+}
+.nutritionFacts .title button:hover {
+    cursor: pointer;
+    background-color: rgba(20, 255, 236, 1);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 80%);
+    transform: scale(1.05);
 }
 
 /* Servings */
@@ -34,6 +49,7 @@
     color-scheme: none;
     margin-top: 4px;
     margin-bottom: 4px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 40%);
 }
 
 /* Calories */
