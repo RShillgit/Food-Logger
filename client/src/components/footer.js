@@ -1,16 +1,20 @@
 import '../styles/footer.css';
+import badge from '../images/badge.svg';
+import GitHub from '../images/GitHub.png';
 
 const Footer = () => {
 
-    // <script src="https://developer.edamam.com/attribution/badge.js"></script>
-    // Add this script to header in index.html 
-    // OR
-    // https://developer.edamam.com/attribution download an svg file
-
     return (
         <div className="footer">
-            <div id="edamam-badge" data-color="white"></div>
-            <p>Icons from <a href='https://www.flaticon.com/' target="_blank">Flaticon</a></p>
+            <a className='edamam' href='https://www.edamam.com/' target="_blank" rel="noreferrer">
+                <img src={badge} alt='Powered By Edamam'/>
+            </a>
+
+            <a href='https://github.com/RShillgit' target="_blank" rel="noreferrer">
+                <img id='githubImg' src={GitHub} alt='GitHub'/>
+            </a>
+
+            <p className='flaticon'>Icons from <a href='https://www.flaticon.com/' target="_blank" rel='noreferrer'>Flaticon</a></p>
         </div>
     )
 

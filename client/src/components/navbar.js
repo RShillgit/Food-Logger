@@ -20,13 +20,7 @@ const Navbar = (props) => {
 
     return (
         <div className="navbar">
-
-            <div className='navbarContent'>
-                <button onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>Home</button>
-
-                <button onClick={userLogout}>Logout</button>
-            </div>
-
+            <button id='logoutButton' onClick={userLogout}>Logout</button>
         </div>
     )
 

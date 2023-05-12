@@ -12,7 +12,7 @@ html, body, #root, .App {
     font-size: 18px;
 }
 .App {
-    margin-top: 68px; /* 52px navbar height + 1rem */
+    padding-bottom: 1rem;
 }
 html, body, #root, .App, input {
     color: white;
@@ -63,17 +63,21 @@ button {
 
 /* Main Page */
 .mainPage {
+    position: relative;
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    min-height: 100vh;
 }
 .mainPage-container {
+    margin-top: 4rem;
     border-radius: 1rem;
     min-width: 66%;
     box-shadow: 0 2px 8px rgb(0 0 0 / 50%);
     padding: 2rem;
     background-color: rgba(255, 255, 255, 0.1);
+    margin-bottom: 4rem;
 }
     /* Date navigation */
     .date-navigation {
@@ -220,7 +224,7 @@ button {
     }
     .modalContent {
         background-color: rgba(255, 255, 255, 0.3);
-        padding: 1rem 8px 1rem 8px;
+        padding: 1rem;
         width: 50vw;
         min-width: 300px;
         height: 60vh;
@@ -392,12 +396,16 @@ button {
         gap: 1rem;
         min-height: 300px;
     }
-    .individualFoodItem .main header {
+    .individualFoodItem .headerContainer {
         display: flex;
         justify-content: center;
-        text-align: center;
-        background-color: rgba(0, 0, 0, 0.5);
         width: 100%;
+    }
+    .individualFoodItem .main header {
+        margin: 0 1rem 0 1rem;
+        text-align: center;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
         border-radius: 8px;
     }
     .individualFoodItem .main .imageContainer {
@@ -410,7 +418,7 @@ button {
         height: 300px;
     }
     .individualFoodItem .main .imageContainer img {
-        object-fit: cover;
+        object-fit: contain;
         width: 100%;
     }
     .unitButtons {

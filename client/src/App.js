@@ -10,6 +10,7 @@ import edit from './images/edit.png';
 import check from './images/check.png';
 import close from './images/close.png';
 import back from './images/back.png';
+import Footer from './components/footer';
 
 function App(props) {
 
@@ -22,20 +23,8 @@ function App(props) {
   const [logDate, setLogDate] = useState();
   const [foodLog, setFoodLog] = useState();
 
-  /* Calories */
-  const [breakfastCalories, setBreakfastCalories] = useState(0);
-  const [lunchCalories, setLunchCalories] = useState(0);
-  const [dinnerCalories, setDinnerCalories] = useState(0);
-  const [snackCalories, setSnackCalories] = useState(0);
-
   const [calorieEditing, setCalorieEditing] = useState(false);
   const [dailyCalorieBudget, setDailyCalorieBudget] = useState(0);
-  const [caloriesRemaining, setCaloriesRemaning] = useState(0);
-
-  /* Macros */
-  const [carbCount, setCarbCount] = useState(0);
-  const [fatCount, setFatCount] = useState(0);
-  const [proteinCount, setProteinCount] = useState(0);
 
   /* Food Search & Display */
   const [foodSearchInput, setFoodSearchInput] = useState('');
@@ -181,9 +170,11 @@ function App(props) {
               :<></>
             }
             
-            <header>
-              <h1>{editingFoodItem.label}</h1>
-            </header>
+            <div className='headerContainer'>
+              <header>
+                <h1>{editingFoodItem.label}</h1>
+              </header>
+            </div>
 
             <div className='unitButtons'>
               {editingFoodItem.measures.map((measure, i) => {
@@ -233,9 +224,12 @@ function App(props) {
               </div>
               :<></>
             }
-            <header>
-              <h1>{selectedFoodItem.food.label}</h1>
-            </header>
+            
+            <div className='headerContainer'>
+              <header>
+                <h1>{selectedFoodItem.food.label}</h1>
+              </header>
+            </div>
 
             <div className='unitButtons'>
               {selectedFoodItem.measures.map((measure, i) => {
@@ -994,11 +988,10 @@ function App(props) {
             :
             <h1>No Food Log</h1>
           }
-
         </div>
         :<></>
       }
-
+      <Footer />
     </div>
   );
 }

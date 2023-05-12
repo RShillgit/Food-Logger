@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {useCookies} from 'react-cookie';
 import '../styles/register.css';
+import Footer from "./footer";
 
 const Register = (props) => {
 
