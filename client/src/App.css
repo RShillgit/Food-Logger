@@ -206,7 +206,7 @@ button {
     .individualExistingFood {
         display: flex;
         justify-content: space-between;
-        gap: 2rem;
+        gap: 8px;
         border-radius: 1rem;
         padding: 8px;
     }
@@ -215,6 +215,13 @@ button {
         background-color: rgba(255, 255, 255, 0.1);
         box-shadow: 0 2px 8px rgb(0 0 0 / 80%);
         transform: scale(1.05);
+    }
+    .individualExistingFood .editClickable {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
     }
     .individualExistingFood .left {
         display: flex;

@@ -318,7 +318,7 @@ function App(props) {
       );
     }
 
-  }, [user, foodSearchOptions, searchedFoods, selectedFoodItem, nutritionFactsDisplay, editingFoodItem, selectedMeal, foodSearchInput])
+  }, [foodLog, user, foodSearchOptions, searchedFoods, selectedFoodItem, nutritionFactsDisplay, editingFoodItem, selectedMeal, foodSearchInput])
 
   // Food search input change
   useEffect(() => {
@@ -681,15 +681,19 @@ function App(props) {
               {foodLog.breakfast.map(food => {
                 return (
                   <div className='individualExistingFood' key={uuidv4()}>
-                    <div className='left' onClick={() => editExistingFoodItem(food)}>
-                      {food.image
-                        ? <img src={food.image} alt=""/>
-                        :<></>
-                      }
-                      <p>{food.label}</p>
+
+                    <div className='editClickable' onClick={() => editExistingFoodItem(food)}>
+                      <div className='left'>
+                        {food.image
+                          ? <img src={food.image} alt=""/>
+                          :<></>
+                        }
+                        <p>{food.label}</p>
+                      </div>
+                      <span>{food.total_calories} cals</span>
                     </div>
+
                     <div className='right'>
-                      <p>{food.total_calories} cals</p>
                       <button onClick={() => deleteFoodItem(meal, food)}>Delete</button>
                     </div>
                   </div>
@@ -713,16 +717,20 @@ function App(props) {
               {foodLog.lunch.map(food => {
                 return (
                   <div className='individualExistingFood' key={uuidv4()}>
-                    <div className='left' onClick={() => editExistingFoodItem(food)}>
-                      {food.image
-                        ? <img src={food.image} alt=""/>
-                        :<></>
-                      }
-                      <p>{food.label}</p>
+
+                    <div className='editClickable' onClick={() => editExistingFoodItem(food)}>
+                      <div className='left'>
+                        {food.image
+                          ? <img src={food.image} alt=""/>
+                          :<></>
+                        }
+                        <p>{food.label}</p>
+                      </div>
+                      <span>{food.total_calories} cals</span>
                     </div>
+
                     <div className='right'>
-                      <p>{food.total_calories} cals</p>
-                      <button onClick={() => deleteFoodItem(meal, food)}>X</button>
+                      <button onClick={() => deleteFoodItem(meal, food)}>Delete</button>
                     </div>
                   </div>
                 )
@@ -745,16 +753,18 @@ function App(props) {
               {foodLog.dinner.map(food => {
                 return (
                   <div className='individualExistingFood' key={uuidv4()}>
-                    <div className='left' onClick={() => editExistingFoodItem(food)}>
-                      {food.image
-                        ? <img src={food.image} alt=""/>
-                        :<></>
-                      }
-                      <p>{food.label}</p>
+                    <div className='editClickable' onClick={() => editExistingFoodItem(food)}>
+                      <div className='left'>
+                        {food.image
+                          ? <img src={food.image} alt=""/>
+                          :<></>
+                        }
+                        <p>{food.label}</p>
+                      </div>
+                      <span>{food.total_calories} cals</span>
                     </div>
                     <div className='right'>
-                      <p>{food.total_calories} cals</p>
-                      <button onClick={() => deleteFoodItem(meal, food)}>X</button>
+                      <button onClick={() => deleteFoodItem(meal, food)}>Delete</button>
                     </div>
                   </div>
                 )
@@ -777,16 +787,20 @@ function App(props) {
               {foodLog.snack.map(food => {
                 return (
                   <div className='individualExistingFood' key={uuidv4()}>
-                    <div className='left' onClick={() => editExistingFoodItem(food)}>
-                      {food.image
-                        ? <img src={food.image} alt=""/>
-                        :<></>
-                      }
-                      <p>{food.label}</p>
+
+                    <div className='editClickable' onClick={() => editExistingFoodItem(food)}>
+                      <div className='left'>
+                        {food.image
+                          ? <img src={food.image} alt=""/>
+                          :<></>
+                        }
+                        <p>{food.label}</p>
+                      </div>
+                      <span>{food.total_calories} cals</span>
                     </div>
+
                     <div className='right'>
-                      <p>{food.total_calories} cals</p>
-                      <button onClick={() => deleteFoodItem(meal, food)}>X</button>
+                      <button onClick={() => deleteFoodItem(meal, food)}>Delete</button>
                     </div>
                   </div>
                 )
