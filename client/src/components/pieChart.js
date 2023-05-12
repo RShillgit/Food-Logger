@@ -30,7 +30,7 @@ const PieChart = (props) => {
     return (
         <div className="pieChartContainer">
             <header className="title">
-                <p>Macronutrients</p>
+                <h2>Macronutrients</h2>
             </header>
             <div className='pieChart'>
                 <Pie data={data} />

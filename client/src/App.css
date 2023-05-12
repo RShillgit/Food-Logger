@@ -192,7 +192,7 @@ button {
         background-color: rgba(255, 255, 255, 0.2);
         box-shadow: 0 2px 8px rgb(0 0 0 / 50%);
         cursor: pointer;
-        transform: scale(1.05);
+        transform: scale(1.02);
     }
 
  /* Meal Modal */
@@ -220,7 +220,7 @@ button {
     }
     .modalContent {
         background-color: rgba(255, 255, 255, 0.3);
-        padding: 1rem;
+        padding: 1rem 8px 1rem 8px;
         width: 50vw;
         min-width: 300px;
         height: 60vh;
@@ -241,6 +241,14 @@ button {
         display: flex;
         width: 100%;
         justify-content: flex-end;
+    }
+    .closeModalButton img {
+        filter: invert(100%) sepia(25%) saturate(1%) hue-rotate(246deg) brightness(110%) contrast(101%);
+        width: 30px;
+    }
+    .closeModalButton img:hover {
+        cursor: pointer;
+        transform: scale(1.2);
     }
     .modalSearchInput {
         display: flex;
@@ -275,7 +283,7 @@ button {
         cursor: pointer;
         background-color: rgba(255, 255, 255, 0.1);
         box-shadow: 0 2px 8px rgb(0 0 0 / 80%);
-        transform: scale(1.05);
+        transform: scale(1.02);
     }
     .individualExistingFood .editClickable {
         display: flex;
@@ -314,12 +322,22 @@ button {
         cursor: pointer;
         background-color: rgba(255, 0, 0, 1);
         box-shadow: 0 2px 8px rgb(0 0 0 / 100%);
-        transform: scale(1.05);
+        transform: scale(1.02);
     }
     .modalBackButtonContainer {
         margin-top: 1rem;
         position: absolute;
         top: 0;
+        left: 0;
+        margin-left: 1rem;
+    }
+    .modalBackButtonContainer img {
+        filter: invert(100%) sepia(25%) saturate(1%) hue-rotate(246deg) brightness(110%) contrast(101%);
+        width: 30px;
+    }
+    .modalBackButtonContainer img:hover {
+        cursor: pointer;
+        transform: scale(1.2);
     }
 
     /* Search results */
@@ -339,7 +357,7 @@ button {
         cursor: pointer;
         background-color: rgba(255, 255, 255, 0.1);
         box-shadow: 0 2px 8px rgb(0 0 0 / 80%);
-        transform: scale(1.05);
+        transform: scale(1.02);
     }
     .searchedFoodItems {
         margin-top: 1rem;
@@ -391,7 +409,7 @@ button {
         left: 0;
         height: 300px;
     }
-    .individualFoodItem .main img {
+    .individualFoodItem .main .imageContainer img {
         object-fit: cover;
         width: 100%;
     }

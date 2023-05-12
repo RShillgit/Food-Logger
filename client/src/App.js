@@ -9,6 +9,7 @@ import arrow from './images/arrow.png';
 import edit from './images/edit.png';
 import check from './images/check.png';
 import close from './images/close.png';
+import back from './images/back.png';
 
 function App(props) {
 
@@ -164,10 +165,12 @@ function App(props) {
 
           <div className='main'>
             <div className='modalBackButtonContainer'>
-              <button onClick={() => {
-                setEditingFoodItem();
-                setNutritionFactsDisplay();
-              }}>{"<"}</button>
+              <img src={back} alt={"<"} 
+                onClick={() => {
+                  setEditingFoodItem();
+                  setNutritionFactsDisplay();
+                }}
+              />
             </div>
 
             {editingFoodItem.image
@@ -214,11 +217,13 @@ function App(props) {
           <div className='main'>
 
             <div className='modalBackButtonContainer'>
-              <button onClick={() => {
-                setFoodSearchInput("");
-                setSelectedFoodItem();
-                setNutritionFactsDisplay();
-              }}>{"<"}</button>
+              <img src={back} alt={"<"} 
+                onClick={() => {
+                  setFoodSearchInput("");
+                  setSelectedFoodItem();
+                  setNutritionFactsDisplay();
+                }}
+              />
             </div>
 
             {selectedFoodItem.food.image
@@ -256,9 +261,11 @@ function App(props) {
 
           <div className='foodSearchContainer'>
             <div className='modalBackButtonContainer'>
-              <button onClick={() => {
-                setSearchedFoods([]);
-              }}>{"<"}</button>
+              <img src={back} alt={"<"} 
+                onClick={() => {
+                  setSearchedFoods([]);
+                }}
+              />
             </div>
 
             <ul className='modalSearchResults'>
@@ -297,7 +304,11 @@ function App(props) {
           </div>
           <div className='foodSearchContainer'>
             <div className='modalBackButtonContainer'>
-              <button onClick={() => setFoodSearchInput("")}>{"<"}</button>
+              <img src={back} alt={"<"} 
+                onClick={() => {
+                  setFoodSearchInput("")
+                }}
+              />
             </div>
             <ul className='modalSearchResults'>
               {foodSearchOptions.map((option, i) => {
@@ -918,7 +929,7 @@ function App(props) {
                   <div className='modalContent'>
                     <div className='modalHeader'>
                       <div className='closeModalButton'>
-                        <button onClick={() => closeMealModal('breakfastModal')}>X</button>
+                        <img src={close} alt='X' onClick={() => closeMealModal('breakfastModal')}/>
                       </div>
                       <h1>Breakfast</h1>
                     </div>
@@ -935,7 +946,7 @@ function App(props) {
                   <div className='modalContent'>
                     <div className='modalHeader'>
                       <div className='closeModalButton'>
-                        <button onClick={() => closeMealModal('lunchModal')}>X</button>
+                        <img src={close} alt='X' onClick={() => closeMealModal('lunchModal')}/>
                       </div>
                       <h1>Lunch</h1>
                     </div>
@@ -952,7 +963,7 @@ function App(props) {
                   <div className='modalContent'>
                     <div className='modalHeader'>
                       <div className='closeModalButton'>
-                        <button onClick={() => closeMealModal('dinnerModal')}>X</button>
+                        <img src={close} alt='X' onClick={() => closeMealModal('dinnerModal')}/>
                       </div>
                       <h1>Dinner</h1>
                     </div>
@@ -969,7 +980,7 @@ function App(props) {
                   <div className='modalContent'>
                     <div className='modalHeader'>
                       <div className='closeModalButton'>
-                        <button onClick={() => closeMealModal('snackModal')}>X</button>
+                        <img src={close} alt='X' onClick={() => closeMealModal('snackModal')}/>
                       </div>
                       <h1>Snack</h1>
                     </div>
