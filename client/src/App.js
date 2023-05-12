@@ -5,6 +5,10 @@ import Navbar from './components/navbar';
 import NutritionFacts from './components/nutritionFacts';
 import { v4 as uuidv4 } from 'uuid'
 import PieChart from './components/pieChart';
+import arrow from './images/arrow.png';
+import edit from './images/edit.png';
+import check from './images/check.png';
+import close from './images/close.png';
 
 function App(props) {
 
@@ -18,14 +22,14 @@ function App(props) {
   const [foodLog, setFoodLog] = useState();
 
   /* Calories */
-  const [caloriesRemaining, setCaloriesRemaining] = useState(2500);
   const [breakfastCalories, setBreakfastCalories] = useState(0);
   const [lunchCalories, setLunchCalories] = useState(0);
   const [dinnerCalories, setDinnerCalories] = useState(0);
   const [snackCalories, setSnackCalories] = useState(0);
 
   const [calorieEditing, setCalorieEditing] = useState(false);
-  const [dailyCalorieBudget, setDailyCalorieBudget] = useState(0)
+  const [dailyCalorieBudget, setDailyCalorieBudget] = useState(0);
+  const [caloriesRemaining, setCaloriesRemaning] = useState(0);
 
   /* Macros */
   const [carbCount, setCarbCount] = useState(0);
@@ -679,7 +683,6 @@ function App(props) {
             ?
             <>
               {foodLog.breakfast.map(food => {
-                console.log(food)
                 return (
                   <div className='individualExistingFood' key={uuidv4()}>
 
@@ -863,33 +866,43 @@ function App(props) {
         <div className='mainPage-container'>
 
           <div className='date-navigation'>
-            <button className='date-nav-button' onClick={previousDay}>{"<"}</button>
+            <img src={arrow} alt={'<'} id='previousDate' className='date-nav-button' onClick={previousDay}/>
             <input className='dateInput' type="date" value={logDate} onChange={(e) => setLogDate(e.target.value)} required={true}/>
-            <button className='date-nav-button' onClick={nextDay}>{">"}</button>
+            <img src={arrow} alt={'>'} className='date-nav-button' onClick={nextDay}/>
           </div>
 
-          <div className='caloriesRemaining'>
+          <div className='calorieBudget'>
             {(calorieEditing)
               ?
               <div className='editCaloriesContainer'>
+                <button>
+                  <img id='closeEdit' src={close} alt='Cancel' onClick={() => {
+                    setDailyCalorieBudget(user.calorie_budget)
+                    setCalorieEditing(false)
+                  }}/>
+                </button>
+
                 <form id='editCalorieBudget' onSubmit={editCalorieBudget}>
                   <input type="number" value={dailyCalorieBudget} onChange={(e) => setDailyCalorieBudget(e.target.value)} min={1} required={true}/>
                 </form>
-                <div className='formButtons'>
-                  <button onClick={() => setCalorieEditing(false)}>Cancel</button>
-                  <button form='editCalorieBudget' type='submit'>Edit</button>
-                </div>
+
+                <button form='editCalorieBudget' type='submit'>
+                  <img id='confirmEdit' src={check} alt="Edit" />
+                </button> 
               </div>
               :
               <>
-                <h2>Calories Remaining <span className='caloriesSpan'>{calculateCalories('remaining')}</span></h2>
-                <button onClick={() => {
-                  setDailyCalorieBudget(calculateCalories('remaining'))
+                <img id='editCaloriesButton' src={edit} alt='Edit' onClick={() => {
+                  setDailyCalorieBudget(user.calorie_budget)
                   setCalorieEditing(true)
-                }}>Edit</button>
+                }}/>
+                <h2>Calorie Budget <span className='caloriesSpan'>{user.calorie_budget}</span></h2>
               </>
             }
-            
+          </div>
+
+          <div className='caloriesRemaining'>
+            <h2>Calories Remaining <span className='caloriesSpan'>{calculateCalories('remaining')}</span></h2>
           </div>
 
           {foodLog
@@ -964,6 +977,7 @@ function App(props) {
                   </div>
                 </dialog>       
               </div>
+
               {generatePieChart()}
             </>
             :

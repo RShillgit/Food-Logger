@@ -10,6 +10,7 @@ const Footer = () => {
     return (
         <div className="footer">
             <div id="edamam-badge" data-color="white"></div>
+            <p>Icons from <a href='https://www.flaticon.com/' target="_blank">Flaticon</a></p>
         </div>
     )
 

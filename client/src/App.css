@@ -80,6 +80,22 @@ button {
         display: flex;
         justify-content: center;
         gap: 4px;
+        align-items: center;
+    }
+    .date-navigation .date-nav-button {
+        width: 30px;
+        height: 20px;
+        filter: invert(70%) sepia(42%) saturate(7488%) hue-rotate(72deg) brightness(124%) contrast(142%);
+    }
+    .date-navigation #previousDate {
+        transform: rotate(180deg);
+    }
+    .date-navigation #previousDate:hover {
+        transform: rotate(180deg) scale(1.2);
+    }
+    .date-navigation .date-nav-button:hover {
+        cursor: pointer;
+        transform: scale(1.2);
     }
     .date-navigation .dateInput {
         display: flex;
@@ -89,30 +105,72 @@ button {
     }
 
     /* Calorie budget */
-    .caloriesRemaining {
+    .calorieBudget {
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 10px;
+        margin-top: 1rem;
     }
-    .caloriesRemaining h2 {
+    .calorieBudget h2 {
         display: flex;
         align-items: center;
         gap: 10px;
+        margin: 0;
     }
     .caloriesSpan {
         font-size: 34px;
         color: #14FFEC;
     }
+    #editCaloriesButton {
+        width: 25px;
+        filter: invert(88%) sepia(44%) saturate(1563%) hue-rotate(344deg) brightness(108%) contrast(99%);
+    }
+    #editCaloriesButton:hover {
+        cursor: pointer;
+        transform: scale(1.2);
+    }
     .editCaloriesContainer {
         display: flex;
-        flex-direction: column;
         align-items: center;
-        padding: 1rem 0 1rem 0;
     }
     #editCalorieBudget input {
         font-size: 25px;
         text-align: center;
+        color: #14FFEC;
+        font-weight: 600;
+    }
+    .editCaloriesContainer button {
+        padding: 4px;
+        border: none;
+        background-color: rgba(0, 0, 0, 0);
+    }
+    .editCaloriesContainer button img {
+        width: 35px;
+    }
+    .editCaloriesContainer #closeEdit {
+        filter: invert(100%) sepia(25%) saturate(1%) hue-rotate(246deg) brightness(110%) contrast(101%);
+    }
+    .editCaloriesContainer #confirmEdit {
+        padding-left: 4px;
+        filter: invert(88%) sepia(44%) saturate(1563%) hue-rotate(344deg) brightness(108%) contrast(99%);
+    }
+    .editCaloriesContainer button img:hover {
+        cursor: pointer;
+        transform: scale(1.2);
+    }
+
+    /* Calories Remaining */
+    .caloriesRemaining {
+        display: flex;
+        justify-content: center;
+    }
+    .caloriesRemaining h2 {
+        margin-bottom: 1rem;
+        margin-top: 0;
+    }
+    .caloriesRemaining .caloriesSpan {
+        color: #16FF00;
     }
 
     /* Meal overviews */
