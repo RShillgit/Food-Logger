@@ -125,9 +125,12 @@ router.get('/guest', (req, res, next) => {
       // Create user with these credentials
       const newUser = new User({
           username: validString,
+          calorie_budget: 2000,
           hash: hash,
           salt: salt,
+          food_logs: []
       })
+
       newUser.save()
       .then(result => {
         return res.status(200).json({success: true, result: result})
