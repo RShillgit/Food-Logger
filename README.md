@@ -8,4 +8,4 @@ Node.js, Express.js, Passport.js, Mongoose, MongoDB, React, CSS, Edamam API
 https://food-logger-production.up.railway.app
 
 ## Demo Video
-https://github.com/RShillgit/Food-Logger/assets/109986681/9093baf1-3d20-4197-aeff-ba8f84c03895
+https://github.com/RShillgit/Food-Logger/assets/109986681/c8512bf5-9186-4b11-9c64-6422b4659dcf
